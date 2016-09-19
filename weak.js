@@ -30,6 +30,7 @@ function resolveWeaksForRun(run, types) {
 function nsm(types, run) {
   return types.reduce((acc, t, index) => {
     if (t !== 'NSM') return acc.push(t);
+
     if (index <= 0) { // [1]
       return acc.push(run.get('sos'));
     } else {
@@ -53,6 +54,7 @@ function nsm(types, run) {
 function en(types, run) {
   return types.map((t) => {
     if (t !== 'EN') return t;
+
     const prevStrong = types.reverse().find(t => isStrong(t)); // [1]
     if (prevStrong === 'AL') { // [2]
       return 'AN';
@@ -72,10 +74,32 @@ function al(types, run) {
 }
 
 
+// http://unicode.org/reports/tr9/#W4
+// [1]: A single European separator between two European
+//      numbers changes to a European number.
+//      A single common separator between two
+//      numbers of the same type changes to that type.
+function es(types, run) {
+  if (types.size < 3) return types;
+
+  const first = types.take(1);
+  const middle = types.zipWith((curr, prevOne, prevTwo) => {
+    if (curr === 'EN' && curr === prevTwo && prevOne === 'ES') { // [1]
+      return 'EN';
+    } else {
+      return prevOne;
+    }
+  }, types.skip(1), types.skip(2));
+  const last = types.last();
+  return first.concat(middle).push(last);
+}
+
+
 export {
   Run,
   nsm,
   en,
   al,
+  es,
   resolveWeaksForRun
 }

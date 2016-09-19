@@ -1,12 +1,9 @@
 import { List } from 'immutable';
-import {
-  Run,
-  al,
-} from '../weak';
+import { Run, al, } from '../weak';
 
 describe('Resolving Weak Types - AL (Arabic Letter)', () => {
 
-  it('should change [R,NI,EN] to [R,NI,EN]', () => {
+  it('should change all ALs to R', () => {
     const run = new Run({
       points: List.of(
         0x645, // U+0645 ARABIC LETTER MEEM
