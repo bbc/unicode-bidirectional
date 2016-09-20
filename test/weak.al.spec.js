@@ -1,5 +1,5 @@
 import { List } from 'immutable';
-import { Run, al, } from '../weak';
+import { Run, al } from '../weak';
 
 describe('Resolving Weak Types - AL (Arabic Letter)', () => {
 
