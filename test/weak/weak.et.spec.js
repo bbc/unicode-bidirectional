@@ -1,5 +1,5 @@
 import { List } from 'immutable';
-import { Run, et } from '../weak';
+import { Run, et } from '../../src/weak/weak';
 
 const AN = 0x0661 // U+0661 ARABIC-INDIC DIGIT ONE
 const EN = 0x0032 // U+0032 DIGIT TWO
