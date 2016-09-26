@@ -1,40 +1,37 @@
 import { Record, Stack, List } from 'immutable';
 
+// Paragraph
+// ------------------------------------------
+// 3.3.2 Explicit Levels and Directions
+// [1]: the "directional status stack"
+// [2]: "At the start of the pass, the directional status stack is initialized to
+//       an entry reflecting the paragraph embedding level, ..."
+// [3]: Initial value described by X1.
 const DirectionalStatusStackEntry = Record({
+  isolate: false,
   level: 0,
-  override: 'neutral',
-  isolate: false
+  override: 'neutral'
 });
 const EmbeddingLevelState = Record({
-  directionalStatusStack: List.of(new DirectionalStatusStackEntry()), // [1]
-  overflowIsolateCount: 0,
+  directionalStatusStack: Stack.of(new DirectionalStatusStackEntry()), // [1,2]
+  bidiTypes: List.of(),
+  embeddingLevels: List.of(),
   overflowEmbeddingCount: 0,
+  overflowIsolateCount: 0,
   validIsolateCount: 0
-}); // [6]
+}); // [3]
 
-
-
+// Bracket
+// ------------------------------------------
 // Used for BD16. to compute bracket pairs
-// Usage:
-//     const stack = Stack.of(new BracketPairStackEntry())
-//     const pairings = List.of(new Pairing())
-const BracketPairStackEntry = Record({
-  point: 0,
-  position: 0
-});
-
-const Pairing = Record({
-  open: 0,
-  close: 0
-});
-
-const BracketPairState = Record({
-  stack: Stack.of(),
-  pairings: List.of()
-});
+const BracketPairStackEntry = Record({ point: 0, position: 0 });
+const Pairing = Record({ open: 0, close: 0 });
+const BracketPairState = Record({ stack: Stack.of(), pairings: List.of() });
 
 export {
   BracketPairStackEntry,
-  Pairing,
-  BracketPairState
+  BracketPairState,
+  DirectionalStatusStackEntry,
+  EmbeddingLevelState,
+  Pairing
 }
