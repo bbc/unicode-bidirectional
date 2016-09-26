@@ -1,56 +1,16 @@
 import { Stack, List, Record } from 'immutable';
 import { DirectionalStatusStackEntry, EmbeddingLevelState } from '../type';
-import flow from 'lodash.flow';
+import { increase, decrease } from '../type';
+import { MAX_DEPTH } from '../type';
+import { LRE, RLE, LRO, RLO, PDF, LRI, RLI, FSI, PDI, LRM, RLM, ALM } from '../type';
+import { Run } from '../type';
+import { rli } from './rli';
+import { rle } from './rle';
+import { pdf } from './pdf';
+import includes from 'lodash.includes';
 
-const MAX_DEPTH = 125;
 const push = (state, x) => state.update('directionalStatusStack', (stack) => stack.push(x));
-
-const LRE = 0x202A;
-const RLE = 0x202B;
-const LRO = 0x202D;
-const RLO = 0x202E;
-const PDF = 0x202C;
-const LRI = 0x2066;
-const RLI = 0x2067;
-const FSI = 0x2068;
-const PDI = 0x2069;
-const LRM = 0x200E;
-const RLM = 0x200F;
-const ALM = 0x061C;
-
-const increase = c => c + 1;
-const decrease = c => c - 1;
-
-// http://unicode.org/reports/tr9/#X2
-// [1]: "Compute the least odd embedding level greater than the embedding level of
-//       the last entry on the directional status stack"
-// [2]: at max_depth or if either overflow count is non-zero, the level remains the same (overflow RLE).
-function rle(ch, index, state) {
-  if (ch !== RLE) return state;
-
-  const lastEmbeddingLevel = state.get('directionalStatusStack').peek().get('level');
-  const isolate = state.get('overflowIsolateCount');
-  const embedding = state.get('overflowEmbeddingCount');
-
-  const newLevel = (lastEmbeddingLevel % 2 === 0) ? lastEmbeddingLevel + 1 : lastEmbeddingLevel + 2; // [1]
-  const newLevelInvalid = (newLevel >= MAX_DEPTH); // [2]
-  const isCurrentOverflow = (isolate > 0 || embedding > 0); // [2]
-  const isOverflowRLE = (newLevelInvalid || isCurrentOverflow); // [2]
-
-  if (isOverflowRLE) {
-    if (isolate === 0) {
-      return state.update('overflowEmbeddingCount', increase);
-    } else {
-      return state;
-    }
-  } else {
-    return state.update('directionalStatusStack', (stack) => {
-      return stack.push(new DirectionalStatusStackEntry({
-        level: newLevel
-      }));
-    });
-  }
-}
+const pop =  (state, x) => state.update('directionalStatusStack', (stack) => stack.pop());
 
 function lre(ch, index, state) {
   return state;
@@ -93,47 +53,6 @@ function isCurrentlyOverflowing(state) {
   return (isolate > 0 || embedding > 0); // [2]
 }
 
-// http://unicode.org/reports/tr9/#X5a
-// [1]: "Set the RLI’s embedding level to the embedding level
-//      of the last entry on the directional status stack."
-// [2]:
-function rli(ch, index, state) {
-  if (ch !== RLI) return state;
-  const lastEntry = state.get('directionalStatusStack').peek();
-  const lastLevel = lastEntry.get('level');
-
-  return flow(
-    function setEmbedding(state) { // [1]
-      return state.update('embeddingLevels', ls => ls.set(index, lastLevel))
-    },
-    function checkOverride(state) {
-      const lastOverride = lastEntry.get('override');
-
-      if (lastOverride !== 'neutral') {
-        const override = (lastOverride === 'left-to-right') ? 'L' : 'R';
-        return state.update('bidiTypes', ts => ts.set(index, 'R'))
-      } else {
-        return state;
-      }
-    },
-    function increaseLevel(state) {
-      const newLevel = (lastLevel + 1) + (lastLevel % 2);
-      const newLevelInvalid = (newLevel >= MAX_DEPTH); // [2]
-      const isOverflow = (newLevelInvalid || isCurrentlyOverflowing(state)); // [2]
-
-      if (isOverflow) return state.update('overflowIsolateCount', increase);
-      return state
-        .update('validIsolateCount', increase)
-        .update('directionalStatusStack', (stack) => {
-          return stack.push(new DirectionalStatusStackEntry({
-            level: newLevel,
-          }));
-        });
-    }
-  )(state);
-}
-
-
 function lri(ch, index, state) {
   return state;
 }
@@ -161,7 +80,7 @@ function pdi(ch, index, state) {
 
   function updateCounts() {
     if (isolateOverflow > 0) { // [A]
-      return state.update('overflowIsolateCount', (c) => c - 1);
+      return state.update('overflowIsolateCount', decrease);
     } else if (validIsolateCount > 0) { // [B]
       return state;
     } else { // [C]
@@ -191,37 +110,40 @@ function pdi(ch, index, state) {
   }
 }
 
-// http://unicode.org/reports/tr9/#X7
-function pdf(ch, index, state) {
-  if (ch !== PDF) return state;
-  if (isolateOverflow > 0) {
-    return state;
-  } else if (embeddingOverflow > 0) {
-    return state.update('overflowEmbeddingCount', decrease);
-  } else if (lastIsolateStatus === 'false' && stack.size() >= 2) {
-    return pop(state);
-  } else {
-    return state;
-  }
-}
 
 // BD7. A level run is a maximal substring of characters that have the same embedding level.
 // It is maximal in that no character immediately before or after
 // the substring has the same level (a level run is also known as a directional run).
+// Apply rules X1-X8 to compute the embedding levels
+// Process each character iteratively, applying rules X2 through X8.
+// Each rule has type: (Character, Index, EmbeddingLevelState) -> EmbeddingLevelState
+// NB. Some rules modify the bidi type.
+// const rules = [rle, lre, rlo, lro, rli, lri, pdi, pdf];
 function levelRuns(codepoints, bidiTypes) {
-  // Apply rules X1-X8 to compute the embedding levels
-  // Process each character iteratively, applying rules X2 through X8.
-  // Each rule has type: (Character, Index, EmbeddingLevelState) -> EmbeddingLevelState
-  // NB. Some rules modify the bidi type.
-  // const rules = [rle, lre, rlo, lro, rli, lri, pdi, pdf];
-  const rules = [rli];
+  const rules = [rle, rli, pdf];
   const initial = new EmbeddingLevelState()
     .set('bidiTypes', bidiTypes)
-    .set('embeddingLevels', List.of(0, 0, 0))
+    .set('embeddingLevels', codepoints.map(__ => 0));
+
   const finalState = codepoints.reduce((state, ch, index) => {
-    return rules.reduce((s, rule) => rule(ch, index, s), state);
+    return rules.reduce((beforeRule, rule) => {
+      const afterRule = rule(ch, index, beforeRule);
+      const level = afterRule.get('directionalStatusStack').peek().get('level');
+      return afterRule.update('embeddingLevels', (levels) => levels.set(index, level));
+    }, state);
   }, initial);
-  return finalState;
+
+  return codepoints
+    .zip(finalState.get('embeddingLevels'))
+    .reduce((runs, [codepoint, level]) => {
+      if (includes([RLE, PDF], codepoint)) {
+        return runs;
+      } else if (!runs.isEmpty() && runs.last().get('level') === level) {
+        return runs.updateIn([runs.size - 1, 'codepoints'], (cps) => cps.push(codepoint));
+      } else {
+        return runs.push(new Run({ codepoints: List.of(codepoint), level }));
+      }
+    }, List.of());
 }
 
 // BD13. Start with an empty set of isolating run sequences.
@@ -233,4 +155,4 @@ function levelRuns(codepoints, bidiTypes) {
 function isolatingRuns() {
 }
 
-export { MAX_DEPTH, levelRuns, push, rle, rlo }
+export { levelRuns, push, rle, rlo }

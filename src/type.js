@@ -1,5 +1,23 @@
 import { Record, Stack, List } from 'immutable';
 
+const LRE = 0x202A;
+const RLE = 0x202B;
+const LRO = 0x202D;
+const RLO = 0x202E;
+const PDF = 0x202C;
+const LRI = 0x2066;
+const RLI = 0x2067;
+const FSI = 0x2068;
+const PDI = 0x2069;
+const LRM = 0x200E;
+const RLM = 0x200F;
+const ALM = 0x061C;
+
+const increase = c => c + 1;
+const decrease = c => c - 1;
+
+const MAX_DEPTH = 125;
+
 // Paragraph
 // ------------------------------------------
 // 3.3.2 Explicit Levels and Directions
@@ -21,6 +39,11 @@ const EmbeddingLevelState = Record({
   validIsolateCount: 0
 }); // [3]
 
+const Run = Record({
+  level: 0,
+  codepoints: List.of()
+});
+
 // Bracket
 // ------------------------------------------
 // Used for BD16. to compute bracket pairs
@@ -29,9 +52,25 @@ const Pairing = Record({ open: 0, close: 0 });
 const BracketPairState = Record({ stack: Stack.of(), pairings: List.of() });
 
 export {
+  increase,
+  decrease,
+  MAX_DEPTH,
+  LRE,
+  RLE,
+  LRO,
+  RLO,
+  PDF,
+  LRI,
+  RLI,
+  FSI,
+  PDI,
+  LRM,
+  RLM,
+  ALM,
   BracketPairStackEntry,
   BracketPairState,
   DirectionalStatusStackEntry,
   EmbeddingLevelState,
-  Pairing
+  Pairing,
+  Run
 }
