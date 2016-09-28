@@ -1,4 +1,4 @@
-import { RLI } from '../type';
+import { LRI } from '../type';
 import { DirectionalStatusStackEntry } from '../type';
 import flow from 'lodash.flow';
 import { increase } from '../type';
@@ -11,11 +11,11 @@ function isCurrentlyOverflowing(state) {
 }
 
 // http://unicode.org/reports/tr9/#X5a
-// [1]: "Set the RLI’s embedding level to the embedding level
+// [1]: "Set the LRI’s embedding level to the embedding level
 //      of the last entry on the directional status stack."
 // [2]:
-function rli(ch, index, state) {
-  if (ch !== RLI) return state;
+function lri(ch, index, state) {
+  if (ch !== LRI) return state;
   const lastEntry = state.get('directionalStatusStack').peek();
   const lastLevel = lastEntry.get('level');
 
@@ -34,7 +34,7 @@ function rli(ch, index, state) {
       }
     },
     function increaseLevel(state) {
-      const newLevel = (lastLevel + 1) + (lastLevel % 2);
+      const newLevel = (lastLevel) + (lastLevel % 2);
       const newLevelInvalid = (newLevel >= MAX_DEPTH); // [2]
       const isOverflow = (newLevelInvalid || isCurrentlyOverflowing(state)); // [2]
 
@@ -51,4 +51,4 @@ function rli(ch, index, state) {
   )(state);
 }
 
-export { rli };
+export { lri };
