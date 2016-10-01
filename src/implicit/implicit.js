@@ -1,5 +1,3 @@
-import { List } from 'immutable';
-
 function resolveImplicit(types, levels) {
   return types.zipWith((t,level) => {
     if (t === 'L')  { return level + (level % 2) }
@@ -8,6 +6,4 @@ function resolveImplicit(types, levels) {
   }, levels);
 }
 
-export {
-  resolveImplicit
-}
+export default resolveImplicit;

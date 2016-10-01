@@ -29,4 +29,3 @@ describe('Resolving Neutrals - Bracket Pairs', () => {
   });
 
 });
-

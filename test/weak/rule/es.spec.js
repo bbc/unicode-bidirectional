@@ -1,5 +1,6 @@
 import { List } from 'immutable';
-import { Run, es } from '../../src/weak/weak';
+import { Run } from '../../../src/weak/weak';
+import es from '../../../src/weak/rule/es';
 
 const EN = 0x0032 // U+0032 DIGIT TWO
 const ES = 0x002B // U+002B PLUS SIGN

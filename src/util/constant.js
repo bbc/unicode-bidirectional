@@ -30,6 +30,10 @@ const RIGHT_SQUARE = 0x005D;
 
 const MAX_DEPTH = 125;
 
+const isET = (t) => t === 'ET';
+const isIsolateInitiator = (t) => includes(['LRI', 'RLI', 'FSI'], t); // [1]
+const isPDI = (point) => point === 0x2069; // [2]
+const isStrong = (t) => includes(['L', 'R', 'AL'], t);
 const isX9ControlCharacter = (t) => includes(['RLE', 'LRE', 'RLO', 'LRO', 'PDF', 'BN'], t);
 
 export {
@@ -37,5 +41,9 @@ export {
   A, B, C, D, E, F, G,
   LEFT_PAR, RIGHT_PAR, LEFT_SQUARE, RIGHT_SQUARE, LEFT_CURLY, RIGHT_CURLY,
   MAX_DEPTH,
-  isX9ControlCharacter
+  isET,
+  isIsolateInitiator,
+  isPDI,
+  isStrong,
+  isX9ControlCharacter,
 }

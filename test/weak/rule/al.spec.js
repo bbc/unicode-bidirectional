@@ -1,8 +1,8 @@
 import { List } from 'immutable';
-import { Run, al } from '../../src/weak/weak';
+import { Run } from '../../../src/weak/weak';
+import al from '../../../src/weak/rule/al';
 
 describe('Resolving Weak Types - AL (Arabic Letter)', () => {
-
   it('should change all ALs to R', () => {
     const run = new Run({
       points: List.of(
@@ -15,5 +15,4 @@ describe('Resolving Weak Types - AL (Arabic Letter)', () => {
     const types = List.of('AL','AL', 'AL', 'AL');
     expect(al(types, run)).to.equal(List.of('R', 'R', 'R', 'R'));
   });
-
 });
