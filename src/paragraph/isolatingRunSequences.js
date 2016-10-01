@@ -1,4 +1,4 @@
-import { List, Map, Range } from 'immutable';
+import { List } from 'immutable';
 import levelRuns from './levelRuns';
 import unzip from '../util/unzip';
 import matchingPDIs from './matchingPDIs';
@@ -6,14 +6,13 @@ import levelRunFromIndex from './levelRunFromIndex';
 import { isX9ControlCharacter } from '../util/constant';
 import { PDI } from '../util/constant';
 
+// BD13.
 function isolatingRunSequences(codepointsWithX9, bidiTypesWithX9) {
-  // BD13.
   // [1]: By X9., we remove control characters that are not
   //      needed at this stage in bidi algorithm
-  const [codepoints, bidiTypes] = unzip(
-    codepointsWithX9.zip(bidiTypesWithX9)
-    .filter(([codepoint, bidiType]) => isX9ControlCharacter(bidiType) === false)
-  );
+  const [codepoints, bidiTypes] = unzip(codepointsWithX9
+    .zip(bidiTypesWithX9)
+    .filter(([__, t]) => isX9ControlCharacter(t) === false)); // [1]
 
   const { initiatorToPDI, initiatorFromPDI } = matchingPDIs(codepoints);
   const runs = levelRuns(codepointsWithX9, bidiTypesWithX9);
@@ -34,7 +33,7 @@ function isolatingRunSequences(codepointsWithX9, bidiTypesWithX9) {
   }
 
   return runs
-    .filter((run) => {
+    .filter(run => {
       const from = run.get('from');
       const firstChar = codepoints.get(from);
       const matchingInitiator = initiatorFromPDI.get(from, -1)
