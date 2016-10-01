@@ -1,7 +1,7 @@
 import { List, Map, Range } from 'immutable';
 import levelRuns from './levelRuns';
 import unzip from '../util/unzip';
-import matchingPDIs from './matchingPDI';
+import matchingPDIs from './matchingPDIs';
 import levelRunFromIndex from './levelRunFromIndex';
 import { isX9ControlCharacter } from '../util/constant';
 import { PDI } from '../util/constant';

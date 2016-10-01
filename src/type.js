@@ -25,7 +25,7 @@ const EmbeddingLevelState = Record({
 }); // [3]
 
 const Run = Record({
-  level: 0, // TODO: change to -1
+  level: -1,
   from: 0,
   to: 0
 });
