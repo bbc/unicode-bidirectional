@@ -1,5 +1,5 @@
 import includes from 'lodash.includes';
-import { LRE, RLE, LRO, RLO, PDF, LRI, RLI, FSI, PDI, LRM, RLM, ALM } from '../../type';
+import { LRE, RLE, LRO, RLO, PDF, LRI, RLI, FSI, PDI } from '../../util/constant';
 
 function other(ch, index, state) {
   if (!includes([RLE, LRE, RLO, LRO, RLI, LRI, PDI, PDF], ch)) {

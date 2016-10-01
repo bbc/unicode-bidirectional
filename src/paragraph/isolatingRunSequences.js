@@ -3,8 +3,8 @@ import levelRuns from './levelRuns';
 import unzip from '../util/unzip';
 import matchingPDIs from './matchingPDI';
 import levelRunFromIndex from './levelRunFromIndex';
-import { isX9ControlCharacter } from '../type';
-import { LRE, RLE, LRO, RLO, PDF, LRI, RLI, FSI, PDI, LRM, RLM, ALM } from '../type';
+import { isX9ControlCharacter } from '../util/constant';
+import { PDI } from '../util/constant';
 
 function isolatingRunSequences(codepointsWithX9, bidiTypesWithX9) {
   // BD13.

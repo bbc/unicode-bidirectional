@@ -1,4 +1,4 @@
-import { PDF } from '../../type';
+import { PDF } from '../../util/constant';
 import { decrease } from '../../type';
 import flow from 'lodash.flow';
 

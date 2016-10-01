@@ -1,8 +1,7 @@
 import includes from 'lodash.includes';
-
-import { Stack, Range, Map, List, Record } from 'immutable';
-import { DirectionalStatusStackEntry, EmbeddingLevelState } from '../type';
-import { LRE, RLE, LRO, RLO, PDF, LRI, RLI, FSI, PDI, LRM, RLM, ALM } from '../type';
+import { List } from 'immutable';
+import { LRE, RLE, LRO, RLO, PDF, LRI, RLI, FSI, PDI } from '../util/constant';
+import { EmbeddingLevelState } from '../type';
 import { Run } from '../type';
 import { increase } from '../type';
 import { rle, lre, rlo, lro, rli, lri, fsi, other, pdi, pdf } from './rule/rules';
@@ -41,6 +40,7 @@ function levelRuns(codepoints, bidiTypes) {
     .filter(([c, __]) => includes([LRE, RLE, PDF], c) === false) // X9.
     .reduce((runs, [codepoint, level], index) => {
       const R = runs.size - 1;
+
       if (runs.getIn([R, 'level'], -1) === level) {
         return runs.updateIn([R, 'to'], increase);
       } else {

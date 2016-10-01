@@ -1,4 +1,4 @@
-import { RLE, MAX_DEPTH } from '../../type';
+import { RLE, MAX_DEPTH } from '../../util/constant';
 import { DirectionalStatusStackEntry } from '../../type';
 import flow from 'lodash.flow';
 

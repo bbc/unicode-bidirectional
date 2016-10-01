@@ -1,5 +1,5 @@
 import includes from 'lodash.includes';
-import { LRI, RLI, FSI, PDI } from '../type';
+import { LRI, RLI, FSI, PDI } from '../util/constant';
 import { Record } from 'immutable';
 
 // http://www.unicode.org/reports/tr9/#BD9

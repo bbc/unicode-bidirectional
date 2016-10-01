@@ -1,17 +1,10 @@
 import { List } from 'immutable';
-import levelRuns from '../../src/paragraph/levelRuns';
-import { LRE, RLE, LRO, RLO, PDF, LRI, RLI, FSI, PDI, LRM, RLM, ALM } from '../../src/type';
+import { LRE, RLE, LRO, RLO, PDF, LRI, RLI, FSI, PDI } from '../../src/util/constant';
+import { A, B, C, D, E, F, G } from '../../src/util/constant';
 import { Run } from '../../src/type';
+import levelRuns from '../../src/paragraph/levelRuns';
 
-const A = 0x0041; // U+0041 LATIN CAPITAL LETTER A
-const B = 0x0042; // U+0042 LATIN CAPITAL LETTER B
-const C = 0x0043; // U+0043 LATIN CAPITAL LETTER C
-const D = 0x0044; // U+0044 LATIN CAPITAL LETTER D
-const E = 0x0045; // U+0044 LATIN CAPITAL LETTER E
-const F = 0x0046; // U+0044 LATIN CAPITAL LETTER F
-const G = 0x0047; // U+0044 LATIN CAPITAL LETTER G
-
-describe('Paragraph - Level Runs', () => {
+describe('[Paragraph] - Level Runs', () => {
   it('should find a trivial run', () => {
     const codepoints = List.of(A, B, C);
     const bidiTypes = List.of('L', 'L', 'L');

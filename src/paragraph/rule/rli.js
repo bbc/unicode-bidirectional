@@ -1,8 +1,7 @@
-import { RLI } from '../../type';
-import { DirectionalStatusStackEntry } from '../../type';
 import flow from 'lodash.flow';
+import { RLI, MAX_DEPTH } from '../../util/constant';
+import { DirectionalStatusStackEntry } from '../../type';
 import { increase } from '../../type';
-import { MAX_DEPTH } from '../../type';
 
 function isCurrentlyOverflowing(state) {
   const isolate = state.get('overflowIsolateCount');

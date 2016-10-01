@@ -1,5 +1,5 @@
 import flow from 'lodash.flow';
-import { PDI } from '../../type';
+import { PDI } from '../../util/constant';
 import { decrease } from '../../type';
 
 // http://unicode.org/reports/tr9/#X6a

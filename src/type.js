@@ -1,25 +1,7 @@
 import { Record, Stack, List } from 'immutable';
-import includes from 'lodash.includes';
-
-const LRE = 0x202A;
-const RLE = 0x202B;
-const LRO = 0x202D;
-const RLO = 0x202E;
-const PDF = 0x202C;
-const LRI = 0x2066;
-const RLI = 0x2067;
-const FSI = 0x2068;
-const PDI = 0x2069;
-const LRM = 0x200E;
-const RLM = 0x200F;
-const ALM = 0x061C;
-
-const isX9ControlCharacter = (t) => includes(['RLE', 'LRE', 'RLO', 'LRO', 'PDF', 'BN'], t);
 
 const increase = c => c + 1;
 const decrease = c => c - 1;
-
-const MAX_DEPTH = 125;
 
 // Paragraph
 // ------------------------------------------
@@ -58,24 +40,10 @@ const BracketPairState = Record({ stack: Stack.of(), pairings: List.of() });
 export {
   increase,
   decrease,
-  MAX_DEPTH,
-  LRE,
-  RLE,
-  LRO,
-  RLO,
-  PDF,
-  LRI,
-  RLI,
-  FSI,
-  PDI,
-  LRM,
-  RLM,
-  ALM,
   BracketPairStackEntry,
   BracketPairState,
   DirectionalStatusStackEntry,
   EmbeddingLevelState,
   Pairing,
-  Run,
-  isX9ControlCharacter
+  Run
 }

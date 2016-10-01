@@ -1,5 +1,4 @@
-import { RLO } from '../../type';
-import { MAX_DEPTH } from '../../type';
+import { MAX_DEPTH, RLO } from '../../util/constant';
 
 function rlo(ch, index, state) {
   if (ch !== RLO) return state;
