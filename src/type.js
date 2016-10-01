@@ -1,4 +1,5 @@
 import { Record, Stack, List } from 'immutable';
+import includes from 'lodash.includes';
 
 const LRE = 0x202A;
 const RLE = 0x202B;
@@ -12,6 +13,8 @@ const PDI = 0x2069;
 const LRM = 0x200E;
 const RLM = 0x200F;
 const ALM = 0x061C;
+
+const isX9ControlCharacter = (t) => includes(['RLE', 'LRE', 'RLO', 'LRO', 'PDF', 'BN'], t);
 
 const increase = c => c + 1;
 const decrease = c => c - 1;
@@ -73,5 +76,6 @@ export {
   DirectionalStatusStackEntry,
   EmbeddingLevelState,
   Pairing,
-  Run
+  Run,
+  isX9ControlCharacter
 }
