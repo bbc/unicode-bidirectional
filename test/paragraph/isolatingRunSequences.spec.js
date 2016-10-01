@@ -1,5 +1,5 @@
 import { List } from 'immutable';
-import { isolatingRunSequences } from '../../src/paragraph/paragraph';
+import isolatingRunSequences from '../../src/paragraph/isolatingRunSequences';
 import { LRE, RLE, LRO, RLO, PDF, LRI, RLI, FSI, PDI, LRM, RLM, ALM } from '../../src/type';
 import { Run } from '../../src/type';
 

@@ -1,5 +1,5 @@
 import { List } from 'immutable';
-import { levelRuns } from '../../src/paragraph/paragraph';
+import levelRuns from '../../src/paragraph/levelRuns';
 import { LRE, RLE, LRO, RLO, PDF, LRI, RLI, FSI, PDI, LRM, RLM, ALM } from '../../src/type';
 import { Run } from '../../src/type';
 

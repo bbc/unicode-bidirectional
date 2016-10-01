@@ -1,69 +1,16 @@
-import includes from 'lodash.includes';
-
-import { Stack, Range, Map, List, Record } from 'immutable';
-import { DirectionalStatusStackEntry, EmbeddingLevelState } from '../type';
-import { LRE, RLE, LRO, RLO, PDF, LRI, RLI, FSI, PDI, LRM, RLM, ALM } from '../type';
-import { Run } from '../type';
-import { increase } from '../type';
-
 // TODO: rename to matchingPDIForIndex
+import { List, Map, Range } from 'immutable';
 import matchingPDI from './matchingPDI';
+import includes from 'lodash.includes';
+import levelRuns from './levelRuns';
 
-import { rle } from './rle';
-import lre from './lre';
-import rlo from './rlo';
-function lro(ch, index, state) { return state; }
-import { rli } from './rli';
-import { lri } from './lri';
-function fsi(ch, index, state) { return state; }
-import other from './other';
-import { pdi } from './pdi';
-import { pdf } from './pdf';
+import { LRE, RLE, LRO, RLO, PDF, LRI, RLI, FSI, PDI, LRM, RLM, ALM } from '../type';
 
+// TODO: move
 const isIsolateInitiator = (codepoint) => includes([LRI, RLI, FSI], lastRunLastChar)
+const isX9ControlChar = (c) => includes(['RLE', 'LRE', 'RLO', 'LRO', 'PDF', 'BN'], c);
 
-// BD7.
-// [1]: Apply rules X1-X8 to compute the embedding levels
-// [2]: Process each character iteratively, applying rules X2 through X8.
-// [3]: Each rule has type: (Character, Index, EmbeddingLevelState) -> EmbeddingLevelState
-// [4]: Some rules modify the bidi types list and embedding levels
-// [5]: Compute the runs by grouping adjacent characters with same the level numbers
-//      with the exception of RLE, LRE and PDF which are stripped from output
-function levelRuns(codepoints, bidiTypes) {
-  const rules = [
-    rle,   // X2.
-    lre,   // X3.
-    //rlo  // X4.
-    //lro  // X5.
-    rli,   // X5a.
-    lri,   // X5b.
-    //fsi  // X5c.
-    other, // X6.
-    pdi,   // X6a.
-    pdf    // X7.
-  ]; // [1][3]
-
-  const initial = new EmbeddingLevelState() // [1]
-    .set('bidiTypes', bidiTypes) // [4]
-    .set('embeddingLevels', codepoints.map(__ => 0)); // [4]
-
-  const finalState = codepoints.reduce((state, ch, index) => { // [2]
-    return rules.reduce((s, rule) => rule(ch, index, s), state);
-  }, initial);
-
-  return codepoints // [5]
-    .zip(finalState.get('embeddingLevels'))
-    .filter(([c, __]) => includes([LRE, RLE, PDF], c) === false) // X9.
-    .reduce((runs, [codepoint, level], index) => {
-      const R = runs.size - 1;
-      if (runs.getIn([R, 'level'], -1) === level) {
-        return runs.updateIn([R, 'to'], increase);
-      } else {
-        return runs.push(new Run({ level, from: index, to: index + 1 }));
-      }
-    }, List.of());
-}
-
+// TODO: move
 // Immutable.js doesnt have unzip
 // Unzips a "zipped" Immutable.js List of pairs in O(N) time
 // unzip(pairs: List<Array<a,b>>): Array<List<a>, List<b>>
@@ -77,16 +24,17 @@ function unzip(pairs) {
   return [unzipped.get(0), unzipped.get(1)];
 }
 
+
 // BD13.
 // [1]: By X9., we remove control characters that are not
 //      needed at this stage in bidi algorithm
 function isolatingRunSequences(codepointsWithX9, bidiTypesWithX9) {
-  const isX9ControlChar = (c) => includes(['RLE', 'LRE', 'RLO', 'LRO', 'PDF', 'BN'], c);
   const [codepoints, bidiTypes] = unzip(
     codepointsWithX9.zip(bidiTypesWithX9)
     .filter(([codepoint, bidiType]) => isX9ControlChar(bidiType) === false)
   );
 
+  // TODO: move
   // [1]: define hashmap mapping: isolate initator |-> matching PDI
   // [2]: define hashmap mapping: matching PDI |-> isolate initiator
   const N = codepoints.size;
@@ -133,4 +81,4 @@ function isolatingRunSequences(codepointsWithX9, bidiTypesWithX9) {
     }, List.of());
 }
 
-export { levelRuns, isolatingRunSequences }
+export default isolatingRunSequences;
