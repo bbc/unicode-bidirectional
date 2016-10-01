@@ -1,191 +1,136 @@
-import { List, Record } from 'immutable';
+import includes from 'lodash.includes';
 
-// -------------------------------------------------
-// 3.3.2 Explicit Levels and Directions
-//
-// [1]: the "directional status stack"
-// [2]: "At the start of the pass, the directional status stack is initialized to
-//       an entry reflecting the paragraph embedding level, ..."
-// [6]: Initial value described by X1.
-const MAX_DEPTH = 125;
-const DirectionalStatusStackEntry = Record({
-  characterType: '',
-  level: 0,
-  override: 'neutral',
-  isolate: false
-});
-const EmbeddingLevelState = Record({
-  directionalStatusStack: List.of(new DirectionalStatusStackEntry()), // [1]
-  overflowIsolateCount: 0,
-  overflowEmbeddingCount: 0,
-  validIsolateCount: 0
-}); // [6]
+import { Stack, Range, Map, List, Record } from 'immutable';
+import { DirectionalStatusStackEntry, EmbeddingLevelState } from '../type';
+import { LRE, RLE, LRO, RLO, PDF, LRI, RLI, FSI, PDI, LRM, RLM, ALM } from '../type';
+import { Run } from '../type';
+import { increase } from '../type';
 
-function push(state, x) {
-  return state.update('directionalStatusStack', (stack) => stack.push(x));
+// TODO: rename to matchingPDIForIndex
+import matchingPDI from './matchingPDI';
+
+import { rle } from './rle';
+import lre from './lre';
+import rlo from './rlo';
+function lro(ch, index, state) { return state; }
+import { rli } from './rli';
+import { lri } from './lri';
+function fsi(ch, index, state) { return state; }
+import other from './other';
+import { pdi } from './pdi';
+import { pdf } from './pdf';
+
+const isIsolateInitiator = (codepoint) => includes([LRI, RLI, FSI], lastRunLastChar)
+
+// BD7.
+// [1]: Apply rules X1-X8 to compute the embedding levels
+// [2]: Process each character iteratively, applying rules X2 through X8.
+// [3]: Each rule has type: (Character, Index, EmbeddingLevelState) -> EmbeddingLevelState
+// [4]: Some rules modify the bidi types list and embedding levels
+// [5]: Compute the runs by grouping adjacent characters with same the level numbers
+//      with the exception of RLE, LRE and PDF which are stripped from output
+function levelRuns(codepoints, bidiTypes) {
+  const rules = [
+    rle,   // X2.
+    lre,   // X3.
+    //rlo  // X4.
+    //lro  // X5.
+    rli,   // X5a.
+    lri,   // X5b.
+    //fsi  // X5c.
+    other, // X6.
+    pdi,   // X6a.
+    pdf    // X7.
+  ]; // [1][3]
+
+  const initial = new EmbeddingLevelState() // [1]
+    .set('bidiTypes', bidiTypes) // [4]
+    .set('embeddingLevels', codepoints.map(__ => 0)); // [4]
+
+  const finalState = codepoints.reduce((state, ch, index) => { // [2]
+    return rules.reduce((s, rule) => rule(ch, index, s), state);
+  }, initial);
+
+  return codepoints // [5]
+    .zip(finalState.get('embeddingLevels'))
+    .filter(([c, __]) => includes([LRE, RLE, PDF], c) === false) // X9.
+    .reduce((runs, [codepoint, level], index) => {
+      const R = runs.size - 1;
+      if (runs.getIn([R, 'level'], -1) === level) {
+        return runs.updateIn([R, 'to'], increase);
+      } else {
+        return runs.push(new Run({ level, from: index, to: index + 1 }));
+      }
+    }, List.of());
 }
 
-// http://unicode.org/reports/tr9/#X2
-// [1]: "Compute the least odd embedding level greater than the embedding level of
-//       the last entry on the directional status stack"
-// [2]: at max_depth or if either overflow count is non-zero, the level remains the same (overflow RLE).
-function rle(state) {
-  const lastEmbeddingLevel = state.get('directionalStatusStack').last().get('level');
-  const isolate = state.get('overflowIsolateCount');
-  const embedding = state.get('overflowEmbeddingCount');
+// Immutable.js doesnt have unzip
+// Unzips a "zipped" Immutable.js List of pairs in O(N) time
+// unzip(pairs: List<Array<a,b>>): Array<List<a>, List<b>>
+function unzip(pairs) {
+  const unzipped = pairs
+    .reduce((unzipped, [a, b]) => {
+      return unzipped
+        .update(0, (as) => as.push(a))
+        .update(1, (bs) => bs.push(b))
+    }, List.of(List.of(), List.of()));
+  return [unzipped.get(0), unzipped.get(1)];
+}
 
-  const newLevel = (lastEmbeddingLevel % 2 === 0) ? lastEmbeddingLevel + 1 : lastEmbeddingLevel + 2; // [1]
-  const newLevelInvalid = (newLevel >= MAX_DEPTH); // [2]
-  const isCurrentOverflow = (isolate > 0 || embedding > 0); // [2]
-  const isOverflowRLE = (newLevelInvalid || isCurrentOverflow); // [2]
+// BD13.
+// [1]: By X9., we remove control characters that are not
+//      needed at this stage in bidi algorithm
+function isolatingRunSequences(codepointsWithX9, bidiTypesWithX9) {
+  const isX9ControlChar = (c) => includes(['RLE', 'LRE', 'RLO', 'LRO', 'PDF', 'BN'], c);
+  const [codepoints, bidiTypes] = unzip(
+    codepointsWithX9.zip(bidiTypesWithX9)
+    .filter(([codepoint, bidiType]) => isX9ControlChar(bidiType) === false)
+  );
 
-  if (isOverflowRLE) {
-    if (isolate === 0) {
-      return state.update('overflowEmbeddingCount', (c) => c + 1);
-    } else {
-      return state;
-    }
-  } else {
-    return state.update('directionalStatusStack', (stack) => {
-      return stack.push(new DirectionalStatusStackEntry({
-        level: newLevel
-      }));
-    });
+  // [1]: define hashmap mapping: isolate initator |-> matching PDI
+  // [2]: define hashmap mapping: matching PDI |-> isolate initiator
+  const N = codepoints.size;
+  const tuples = Range()
+    .zip(Range(0, N)
+    .map(i => matchingPDI(codepoints, i)))
+    .filter(([x, y]) => y !== -1);
+  const tuplesInverted = tuples.map(([x, y]) => [y, x]);
+
+  const matchingPDIs = Map(tuples); // [1]
+  const matchingIsolates = Map(tuplesInverted); // [2]
+  const runs = levelRuns(codepointsWithX9, bidiTypesWithX9);
+
+  function getLevelRunByIndex(index) {
+    const lookup = runs.filter(run => index >= run.get('from') && index < run.get('to'));
+    if (lookup.size > 0) return lookup.last();
+    return new Run();
   }
-}
 
-function lre(state) {
-}
-
-function rlo(state) {
-  const lastEmbeddingLevel = state.get('directionalStatusStack').last().get('level');
-  const isolate = state.get('overflowIsolateCount');
-  const embedding = state.get('overflowEmbeddingCount');
-
-  const newLevel = (lastEmbeddingLevel % 2 === 0) ? lastEmbeddingLevel + 1 : lastEmbeddingLevel + 2; // [1]
-  const newLevelInvalid = (newLevel >= MAX_DEPTH); // [2]
-  const isCurrentOverflow = (isolate > 0 || embedding > 0); // [2]
-  const isOverflowRLE = (newLevelInvalid || isCurrentOverflow); // [2]
-
-  if (isOverflowRLE) {
-    if (isolate === 0) {
-      return state.update('overflowEmbeddingCount', (c) => c + 1);
-    } else {
-      return state;
-    }
-  } else {
-    return state.update('directionalStatusStack', (stack) => {
-      return stack.push(new DirectionalStatusStackEntry({
-        level: newLevel,
-        override: 'right-to-left'
-      }));
-    });
-  }
-}
-
-function lro(state) {
-}
-
-function rli(state, index=0) {
-  const lastEntry = state.get('directionalStatusStack').last();
-  const lastLevel = lastEntry.get('level');
-  const lastOverride = lastEntry.get('override');
-
-  if (lastOverrride === 'left-to-right') {
-    state.update('characterTypes', (characterTypes) => {
-      return characterTypes.update(index, (type) => 'L');
-    });
-  }
-  if (lastOverrride === 'right-to-right') {
-    state.update('characterTypes', (characterTypes) => {
-      return characterTypes.update(index, (type) => 'R');
-    });
+  function findIsolateChain(sequence) {
+      // [1]: level run currently last in the sequence
+      //      ends with an isolate initiator that has a matching PDI
+      // [2]: level run containing the matching PDI to the sequence
+      const R = sequence.size - 1;
+      const lastRunLastChar = sequence.last().get('to') - 1;
+      const matchingInitiator = matchingPDIs.get(lastRunLastChar, -1);
+      if (matchingInitiator > -1) { // [1]
+        return findIsolateChain(sequence.push(getLevelRunByIndex(matchingInitiator)));
+      } else {
+        return sequence;
+      }
   }
 
-  const newLevel = (lastLevel % 2 === 0) ? lastLevel + 1 : lastLevel + 2; // [1]
-  const newLevelInvalid = (newLevel >= MAX_DEPTH); // [2]
-  const isCurrentOverflow = (isolate > 0 || embedding > 0); // [2]
-  const isOverflow = (newLevelInvalid || isCurrentOverflow); // [2]
-
-  if (isOverflow) {
-    return state.update('overflowIsolateCount', (c) => c + 1);
-  } else {
-    return state
-      .update('validIsolateCount', (c) => c + 1)
-      .update('directionalStatusStack', (stack) => {
-        return stack.push(new DirectionalStatusStackEntry({
-          level: newLevel,
-          override: 'right-to-left'
-        }));
-      });
-  }
+  return runs
+    .filter((run) => {
+      const from = run.get('from');
+      const firstChar = codepoints.get(from);
+      const matchingInitiator = matchingIsolates.get(from, -1)
+      return (firstChar !== PDI || matchingInitiator === -1);
+    })
+    .reduce((sequences, run, index) => {
+      const sequence = findIsolateChain(List.of(run));
+      return sequences.push(sequence);
+    }, List.of());
 }
 
-function lri(state) {
-}
-
-// [1]: "While the directional isolate status of the last entry on
-//      the stack is false, pop the last entry from the directional status stack"
-function pdi(state) {
-  const isolateOverflow = state.get('overflowIsolateCount');
-  const validIsolateCount = state.get('validIsolateCount');
-
-  // in all cases:
-  // if (lastOverrride === 'left-to-right') {
-  //   state.update('characterTypes', (characterTypes) => {
-  //     return characterTypes.update(index, (type) => 'L');
-  //   });
-  // }
-  // if (lastOverrride === 'right-to-right') {
-  //   state.update('characterTypes', (characterTypes) => {
-  //     return characterTypes.update(index, (type) => 'R');
-  //   });
-  // }
-  // .update('directionalStatusStack', (stack) => {
-  //   return stack.push(new DirectionalStatusStackEntry({
-  //     level: prevLevel,
-  //     override: 'right-to-left'
-  //   }));
-  // });
-
-  // this PDI matches an overflow isolate initiator.
-  // this PDI does not match any isolate initiator, valid or overflow
-  // this PDI matches a valid isolate initiator
-  if (isolateOverflow > 0) { // []
-    return state.update('overflowIsolateCount', (c) => c + 1);
-  } else if (validIsolateCount > 0) { // []
-    return state;
-  } else { // []
-    return state
-      .set('overflowEmbeddingCount', 0)
-      .update('directionalStatusStack', (stack) => {
-        return stack
-          .reverse()
-          .takeWhile(entry => entry.get('isolate') == false)
-          .reverse() // [1]
-      });
-  }
-}
-
-// http://unicode.org/reports/tr9/#X7
-function pdf(state) {
-  if (isolateOverflow > 0) { // []
-    return state;
-  } else if (embeddingOverflow > 0) {
-    return state.update('overflowEmbeddingCount', (c) => c - 1);
-  } else if (lastIsolateStatus === 'false' && stack.size() >= 2) {
-    return pop(state);
-  } else {
-    return state;
-  }
-}
-
-
-export {
-  MAX_DEPTH,
-  push,
-  DirectionalStatusStackEntry,
-  EmbeddingLevelState,
-  rle,
-  rlo
-}
+export { levelRuns, isolatingRunSequences }
