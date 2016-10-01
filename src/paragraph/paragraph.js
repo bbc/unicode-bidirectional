@@ -1,9 +1,13 @@
 import includes from 'lodash.includes';
 
-import { Stack, List, Record } from 'immutable';
+import { Stack, Range, Map, List, Record } from 'immutable';
 import { DirectionalStatusStackEntry, EmbeddingLevelState } from '../type';
 import { LRE, RLE, LRO, RLO, PDF, LRI, RLI, FSI, PDI, LRM, RLM, ALM } from '../type';
 import { Run } from '../type';
+import { increase } from '../type';
+
+// TODO: rename to matchingPDIForIndex
+import matchingPDI from './matchingPDI';
 
 import { rle } from './rle';
 import lre from './lre';
@@ -16,13 +20,15 @@ import other from './other';
 import { pdi } from './pdi';
 import { pdf } from './pdf';
 
-// BD7. A level run is a maximal substring of characters that have the same embedding level.
-// It is maximal in that no character immediately before or after
-// the substring has the same level (a level run is also known as a directional run).
+const isIsolateInitiator = (codepoint) => includes([LRI, RLI, FSI], lastRunLastChar)
+
+// BD7.
 // [1]: Apply rules X1-X8 to compute the embedding levels
 // [2]: Process each character iteratively, applying rules X2 through X8.
 // [3]: Each rule has type: (Character, Index, EmbeddingLevelState) -> EmbeddingLevelState
-// NB. Some rules modify the bidi type.
+// [4]: Some rules modify the bidi types list and embedding levels
+// [5]: Compute the runs by grouping adjacent characters with same the level numbers
+//      with the exception of RLE, LRE and PDF which are stripped from output
 function levelRuns(codepoints, bidiTypes) {
   const rules = [
     rle,   // X2.
@@ -36,34 +42,95 @@ function levelRuns(codepoints, bidiTypes) {
     pdi,   // X6a.
     pdf    // X7.
   ]; // [1][3]
-  const initial = new EmbeddingLevelState() // X1.
-    .set('bidiTypes', bidiTypes)
-    .set('embeddingLevels', codepoints.map(__ => 0));
 
-  const finalState = codepoints.reduce((state, ch, index) => {
+  const initial = new EmbeddingLevelState() // [1]
+    .set('bidiTypes', bidiTypes) // [4]
+    .set('embeddingLevels', codepoints.map(__ => 0)); // [4]
+
+  const finalState = codepoints.reduce((state, ch, index) => { // [2]
     return rules.reduce((s, rule) => rule(ch, index, s), state);
   }, initial);
 
-  return codepoints
+  return codepoints // [5]
     .zip(finalState.get('embeddingLevels'))
-    .reduce((runs, [codepoint, level]) => {
-      if (includes([RLE, PDF], codepoint)) {
-        return runs;
-      } else if (!runs.isEmpty() && runs.last().get('level') === level) {
-        return runs.updateIn([runs.size - 1, 'codepoints'], cps => cps.push(codepoint));
+    .filter(([c, __]) => includes([LRE, RLE, PDF], c) === false) // X9.
+    .reduce((runs, [codepoint, level], index) => {
+      const R = runs.size - 1;
+      if (runs.getIn([R, 'level'], -1) === level) {
+        return runs.updateIn([R, 'to'], increase);
       } else {
-        return runs.push(new Run({ codepoints: List.of(codepoint), level }));
+        return runs.push(new Run({ level, from: index, to: index + 1 }));
       }
     }, List.of());
 }
 
-// BD13. Start with an empty set of isolating run sequences.
-// For each level run in the paragraph whose first character is not a PDI, or is a PDI that does not match any isolate initiator:
-// - Create a new level run sequence, and initialize it to contain just that level run.
-// - While the level run currently last in the sequence ends with an isolate initiator that has a matching PDI,
-//   append the level run containing the matching PDI to the sequence. (Note that this matching PDI must be the first character of its level run.)
-// - Add the resulting sequence of level runs to the set of isolating run sequences.
-function isolatingRuns() {
+// Immutable.js doesnt have unzip
+// Unzips a "zipped" Immutable.js List of pairs in O(N) time
+// unzip(pairs: List<Array<a,b>>): Array<List<a>, List<b>>
+function unzip(pairs) {
+  const unzipped = pairs
+    .reduce((unzipped, [a, b]) => {
+      return unzipped
+        .update(0, (as) => as.push(a))
+        .update(1, (bs) => bs.push(b))
+    }, List.of(List.of(), List.of()));
+  return [unzipped.get(0), unzipped.get(1)];
 }
 
-export { levelRuns }
+// BD13.
+// [1]: By X9., we remove control characters that are not
+//      needed at this stage in bidi algorithm
+function isolatingRunSequences(codepointsWithX9, bidiTypesWithX9) {
+  const isX9ControlChar = (c) => includes(['RLE', 'LRE', 'RLO', 'LRO', 'PDF', 'BN'], c);
+  const [codepoints, bidiTypes] = unzip(
+    codepointsWithX9.zip(bidiTypesWithX9)
+    .filter(([codepoint, bidiType]) => isX9ControlChar(bidiType) === false)
+  );
+
+  // [1]: define hashmap mapping: isolate initator |-> matching PDI
+  // [2]: define hashmap mapping: matching PDI |-> isolate initiator
+  const N = codepoints.size;
+  const tuples = Range()
+    .zip(Range(0, N)
+    .map(i => matchingPDI(codepoints, i)))
+    .filter(([x, y]) => y !== -1);
+  const tuplesInverted = tuples.map(([x, y]) => [y, x]);
+
+  const matchingPDIs = Map(tuples); // [1]
+  const matchingIsolates = Map(tuplesInverted); // [2]
+  const runs = levelRuns(codepointsWithX9, bidiTypesWithX9);
+
+  function getLevelRunByIndex(index) {
+    const lookup = runs.filter(run => index >= run.get('from') && index < run.get('to'));
+    if (lookup.size > 0) return lookup.last();
+    return new Run();
+  }
+
+  function findIsolateChain(sequence) {
+      // [1]: level run currently last in the sequence
+      //      ends with an isolate initiator that has a matching PDI
+      // [2]: level run containing the matching PDI to the sequence
+      const R = sequence.size - 1;
+      const lastRunLastChar = sequence.last().get('to') - 1;
+      const matchingInitiator = matchingPDIs.get(lastRunLastChar, -1);
+      if (matchingInitiator > -1) { // [1]
+        return findIsolateChain(sequence.push(getLevelRunByIndex(matchingInitiator)));
+      } else {
+        return sequence;
+      }
+  }
+
+  return runs
+    .filter((run) => {
+      const from = run.get('from');
+      const firstChar = codepoints.get(from);
+      const matchingInitiator = matchingIsolates.get(from, -1)
+      return (firstChar !== PDI || matchingInitiator === -1);
+    })
+    .reduce((sequences, run, index) => {
+      const sequence = findIsolateChain(List.of(run));
+      return sequences.push(sequence);
+    }, List.of());
+}
+
+export { levelRuns, isolatingRunSequences }
