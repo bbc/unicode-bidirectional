@@ -6,7 +6,7 @@ import { LRE, RLE, LRO, RLO, PDF, LRI, RLI, FSI, PDI, LRM, RLM, ALM } from '../t
 import { Run } from '../type';
 
 import { rle } from './rle';
-function lre(ch, index, state) { return state; }
+import lre from './lre';
 import rlo from './rlo';
 function lro(ch, index, state) { return state; }
 import { rli } from './rli';
@@ -26,7 +26,7 @@ import { pdf } from './pdf';
 function levelRuns(codepoints, bidiTypes) {
   const rules = [
     rle,   // X2.
-    //lre  // X3.
+    lre,   // X3.
     //rlo  // X4.
     //lro  // X5.
     rli,   // X5a.
