@@ -11,15 +11,14 @@ import { BracketPairStackEntry, Pairing, BracketPairState } from '../type';
 //
 // [1]: Sort the list of pairs of text positions in ascending order
 //      based on the text position of the opening paired bracket.
-
 const LEFT_PAR = 0x0028;
 const RIGHT_PAR = 0x0029;
 const LEFT_SQUARE = 0x005B;
 const RIGHT_SQUARE = 0x005D;
 const LEFT_CURLY = 0x007B;
 const RIGHT_CURLY = 0x007D;
-function pairedBrackets(points, bidiTypes) {
 
+function pairedBrackets(points, bidiTypes) {
   const isOpening = (point, bidiType) => bracketType(point) === 'Open'  && bidiType === 'ON';
   const isClosing = (point, bidiType) => bracketType(point) === 'Close' && bidiType === 'ON';
 
