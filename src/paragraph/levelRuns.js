@@ -1,7 +1,7 @@
 import includes from 'lodash.includes';
-import { List } from 'immutable';
+import { List, Stack } from 'immutable';
 import { LRE, RLE, LRO, RLO, PDF, LRI, RLI, FSI, PDI } from '../util/constant';
-import { EmbeddingLevelState } from '../type';
+import { DirectionalStatusStackEntry, EmbeddingLevelState } from '../type';
 import { Run } from '../type';
 import { increase } from '../type';
 import { rle, lre, rlo, lro, rli, lri, fsi, other, pdi, pdf } from './rule/rules';
@@ -13,7 +13,7 @@ import { rle, lre, rlo, lro, rli, lri, fsi, other, pdi, pdf } from './rule/rules
 // [4]: Some rules modify the bidi types list and embedding levels
 // [5]: Compute the runs by grouping adjacent characters with same the level numbers
 //      with the exception of RLE, LRE and PDF which are stripped from output
-function levelRuns(codepoints, bidiTypes) {
+function levelRuns(codepoints, bidiTypes, paragraphLevel = 0) {
   const rules = [
     rle,   // X2.
     lre,   // X3.
@@ -27,9 +27,10 @@ function levelRuns(codepoints, bidiTypes) {
     pdf    // X7.
   ]; // [1][3]
 
-  const initial = new EmbeddingLevelState() // [1]
+  const initialStack = Stack.of(new DirectionalStatusStackEntry({ level: paragraphLevel }));
+  const initial = new EmbeddingLevelState({ directionalStatusStack: initialStack })
     .set('bidiTypes', bidiTypes) // [4]
-    .set('embeddingLevels', codepoints.map(__ => 0)); // [4]
+    .set('embeddingLevels', codepoints.map(__ => paragraphLevel)); // [4]
 
   const finalState = codepoints.reduce((state, ch, index) => { // [2]
     return rules.reduce((s, rule) => rule(ch, index, s), state);

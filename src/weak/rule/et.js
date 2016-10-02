@@ -6,7 +6,7 @@ import { isET } from '../../util/constant';
 // [2]: if slice(index) is some sequence of the form ET, ET, ET, ..., EN
 //      of if slice(0, index).reverse() is some sequence the form ET, ET, ET, ..., EN
 //      then there is some EN adjacent to the ET sequence
-function et(types, run) {
+function et(types) {
   return types.map((t, index) => {
     if (t !== 'ET') return t;
 

@@ -28,7 +28,13 @@ const Run = Record({
   level: -1,
   from: 0,
   to: 0
-});
+}, 'Run');
+
+const Sequence = Record({
+  runs: List.of(),
+  eos: '',
+  sos: '',
+}, 'Sequence');
 
 // Bracket
 // ------------------------------------------
@@ -45,5 +51,6 @@ export {
   DirectionalStatusStackEntry,
   EmbeddingLevelState,
   Pairing,
-  Run
+  Run,
+  Sequence
 }

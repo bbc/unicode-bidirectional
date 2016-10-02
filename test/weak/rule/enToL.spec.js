@@ -1,5 +1,4 @@
 import { List } from 'immutable';
-import { Run } from '../../../src/weak/weak';
 import enToL from '../../../src/weak/rule/enToL';
 
 const L  = 0x006D // U+006D LATIN SMALL LETTER M
@@ -10,15 +9,15 @@ const NI = 0x0020 // U+0020 SPACE (e.g. of some Neutral-Isolate)
 describe('Resolving Weak Types - ENs to Ls', () => {
 
   it('should change [L,NI,EN] to [L,NI,L]', () => {
-    const run = new Run({ points: List.of(L, NI, EN) });
+    const points = List.of(L, NI, EN);
     const types = List.of('L', 'NI', 'EN');
-    expect(enToL(types, run)).to.equal(List.of('L', 'NI', 'L'));
+    expect(enToL(types, points)).to.equal(List.of('L', 'NI', 'L'));
   });
 
   it('should change [R,NI,EN] to [R,NI,EN]', () => {
-    const run = new Run({ points: List.of(R, NI, EN) });
+    const points = List.of(R, NI, EN);
     const types = List.of('R', 'NI', 'EN');
-    expect(enToL(types, run)).to.equal(List.of('R', 'NI', 'EN'));
+    expect(enToL(types, points)).to.equal(List.of('R', 'NI', 'EN'));
   });
 
 });

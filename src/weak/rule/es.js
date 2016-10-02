@@ -4,7 +4,7 @@
 // [2]: A single common separator between two
 //      numbers of the same type changes to that type.
 // [3]: (Otherwise make no changes)
-function es(types, run) {
+function es(types) {
   if (types.size < 3) return types;
 
   const first = types.take(1);
