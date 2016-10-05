@@ -49,6 +49,27 @@ const RIGHT_CURLY = 0x007D;
 const RIGHT_PAR = 0x0029;
 const RIGHT_SQUARE = 0x005D;
 
+const bracketType = (p) => {
+  if (includes([LEFT_PAR, LEFT_SQUARE, LEFT_CURLY], p)) { return 'Open'; }
+  if (includes([RIGHT_PAR, RIGHT_SQUARE, RIGHT_CURLY], p)) { return 'Close'; }
+  else { return 'None'; }
+};
+
+const isOpeningBracket = (point, bidiType) =>
+  bracketType(point) === 'Open'  && bidiType === 'ON';
+const isClosingBracket = (point, bidiType) =>
+  bracketType(point) === 'Close' && bidiType === 'ON';
+
+const oppositeBracket = (p) => {
+  if (p == LEFT_PAR) return RIGHT_PAR;
+  if (p == RIGHT_PAR) return LEFT_PAR;
+  if (p == LEFT_SQUARE) return RIGHT_SQUARE;
+  if (p == RIGHT_SQUARE) return LEFT_SQUARE;
+  if (p == LEFT_CURLY) return RIGHT_CURLY;
+  if (p == RIGHT_CURLY) return LEFT_CURLY;
+  return 'None';
+};
+
 const MAX_DEPTH = 125;
 
 const isET = (t) => t === 'ET';
@@ -68,6 +89,9 @@ export {
   // ET1,
   WS1,
   LEFT_PAR, RIGHT_PAR, LEFT_SQUARE, RIGHT_SQUARE, LEFT_CURLY, RIGHT_CURLY,
+  isOpeningBracket,
+  isClosingBracket,
+  oppositeBracket,
   MAX_DEPTH,
   isET,
   isNI,

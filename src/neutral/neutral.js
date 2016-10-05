@@ -1,7 +1,7 @@
 import { List } from 'immutable';
 import isUndefined from 'lodash.isundefined';
 import includes from 'lodash.includes';
-import { pairedBrackets } from '../bracket/bracket';
+import bracketPairs from '../bracket/bracketPairs';
 import { isNI } from '../util/constant';
 
 // [1]: If any strong type (either L or R) matching the embedding direction
@@ -9,7 +9,7 @@ import { isNI } from '../util/constant';
 //      match the embedding direction.
 // function resolveBrackets(bidiTypes, bracketPairs, ltr = true) {
 function resolveBrackets(bidiTypes, points, sos, eos, level) {
-  const pairs = pairedBrackets(points);
+  const pairs = bracketPairs(points);
   return pairs.reduce((currTypes, pair) => {
     const open = pair.get('open');
     const close = pair.get('close');
