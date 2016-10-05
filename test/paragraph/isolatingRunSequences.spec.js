@@ -77,19 +77,19 @@ describe('[Paragraph] - Isolating Run Sequences', () => {
     const codepoints = List.of(A, RLI, B, LRI, C, PDI, D, PDI, RLI, E, PDI, F);
     const types = List.of('L', 'LRI', 'L', 'LRI', 'L', 'PDI', 'L', 'PDI', 'RLI', 'L', 'PDI', 'L');
     const sequences = List.of(
-      new Sequence({ sos: 'L', eos: 'L', runs: List.of( //LR
+      new Sequence({ sos: 'L', eos: 'L', runs: List.of(
         new Run({ level: 0, from: 0, to: 2 }),
         new Run({ level: 0, from: 7, to: 9 }),
         new Run({ level: 0, from: 10, to: 12 }))
       }),
-      new Sequence({ sos: 'R', eos: 'R', runs: List.of( //RL
+      new Sequence({ sos: 'R', eos: 'R', runs: List.of(
         new Run({ level: 1, from: 2, to: 4 }),
         new Run({ level: 1, from: 5, to: 7 })),
       }),
-      new Sequence({ sos: 'L', eos: 'L', runs: List.of( //LL
+      new Sequence({ sos: 'L', eos: 'L', runs: List.of(
         new Run({ level: 2, from: 4, to: 5 }))
       }),
-      new Sequence({ sos: 'R', eos: 'R', runs: List.of( //LR
+      new Sequence({ sos: 'R', eos: 'R', runs: List.of(
         new Run({ level: 1, from: 9, to: 10 }))
       })
     );
