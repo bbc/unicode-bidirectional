@@ -74,6 +74,7 @@ const MAX_DEPTH = 125;
 
 const isET = (t) => t === 'ET';
 const isNI = (t) => includes(['B', 'S', 'WS', 'ON', 'FSI', 'LRI', 'RLI', 'PDI'], t); // 3.1.4
+const isR = (t) => includes(['R', 'AN', 'EN'], t);
 const isIsolateInitiator = (t) => includes(['LRI', 'RLI', 'FSI'], t); // [1]
 const isPDI = (point) => point === 0x2069; // [2]
 const isStrong = (t) => includes(['L', 'R', 'AL'], t);
@@ -95,6 +96,7 @@ export {
   MAX_DEPTH,
   isET,
   isNI,
+  isR,
   isIsolateInitiator,
   isPDI,
   isStrong,

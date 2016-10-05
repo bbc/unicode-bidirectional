@@ -1,10 +1,10 @@
 import { List } from 'immutable';
-import { ON1 as ON } from '../../src/util/constant';
 import { L1 as L } from '../../src/util/constant';
+import { ON1 as ON } from '../../src/util/constant';
 import { R1 as R } from '../../src/util/constant';
 import { resolveRemaining } from '../../src/neutral/neutral';
 
-const __ = 'L';
+const __ = 'L'; // a bidi type we "dont care" about
 
 describe('[Neutral] Resolving Isolates (N2) - Remaining NIs', () => {
 

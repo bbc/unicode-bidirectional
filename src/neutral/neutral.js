@@ -2,7 +2,7 @@ import { List } from 'immutable';
 import isUndefined from 'lodash.isundefined';
 import includes from 'lodash.includes';
 import bracketPairs from '../bracket/bracketPairs';
-import { isNI } from '../util/constant';
+import { isNI, isR } from '../util/constant';
 
 // http://unicode.org/reports/tr9/#N0
 function resolveBrackets(bidiTypes, points, sos, eos, level) {
@@ -38,23 +38,17 @@ function resolveBrackets(bidiTypes, points, sos, eos, level) {
 // http://unicode.org/reports/tr9/#N1
 function resolveIsolates(types, codepoints, sos, eos, level) {
   return types.map((t, index) => {
-    if (t !== 'NI') return t;
+    if (!isNI(t)) return t;
 
-    // TODO: add sos to behind, add eos to ahead
-    const behind = types.slice(0, index).reverse();
-    const ahead = types.slice(index);
+    const behind = types.slice(0, index).reverse().push(sos);
+    const ahead = types.slice(index).push(eos);
 
-    // TODO: use isNI from constants
-    const isNi = (x) => x === 'NI';
-    // TODO: move to constants
-    const isR = (x) => includes(['R', 'AN', 'EN'], x);
-    // TODO: rename to behindAdjacent
-    const behindAdj = behind.skipWhile(isNi).first();
-    const aheadAdj = ahead.skipWhile(isNi).first();
+    const behindAdjacent = behind.skipWhile(isNI).first();
+    const aheadAdjacent = ahead.skipWhile(isNI).first();
 
-    if (behindAdj === 'L' && aheadAdj === 'L') {
+    if (behindAdjacent === 'L' && aheadAdjacent === 'L') {
       return 'L'; // [1]
-    } else if(isR(behindAdj) && isR(aheadAdj)) {
+    } else if(isR(behindAdjacent) && isR(aheadAdjacent)) {
       return 'R';
     } else {
       return t;
