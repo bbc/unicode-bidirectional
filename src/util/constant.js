@@ -21,6 +21,9 @@ const E = 0x0045; // U+0044 LATIN CAPITAL LETTER E
 const F = 0x0046; // U+0044 LATIN CAPITAL LETTER F
 const G = 0x0047; // U+0044 LATIN CAPITAL LETTER G
 
+// Examples of BN (Boundary Neutral)
+const BN1 = 0x0000
+
 // Examples of L (Left-to-right)
 const L1  = 0x006D // U+006D LATIN SMALL LETTER M
 
@@ -87,6 +90,7 @@ export {
   ON1,
   AN1,
   EN1,
+  BN1,
   // ET1,
   WS1,
   LEFT_PAR, RIGHT_PAR, LEFT_SQUARE, RIGHT_SQUARE, LEFT_CURLY, RIGHT_CURLY,

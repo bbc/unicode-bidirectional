@@ -5,6 +5,7 @@ import { DirectionalStatusStackEntry, EmbeddingLevelState } from '../type';
 import { Run } from '../type';
 import { increase } from '../type';
 import { rle, lre, rlo, lro, rli, lri, fsi, other, pdi, pdf } from './rule/rules';
+import { isX9ControlCharacter } from '../util/constant';
 
 // BD7.
 // [1]: Apply rules X1-X8 to compute the embedding levels
@@ -37,9 +38,9 @@ function levelRuns(codepoints, bidiTypes, paragraphLevel = 0) {
   }, initial);
 
   return codepoints // [5]
-    .zip(finalState.get('embeddingLevels'))
-    .filter(([c, __]) => includes([LRE, RLE, PDF], c) === false) // X9.
-    .reduce((runs, [codepoint, level], index) => {
+    .zip(bidiTypes, finalState.get('embeddingLevels'))
+    .filter(([__, t, ___]) => isX9ControlCharacter(t) === false) // X9.
+    .reduce((runs, [codepoint, bidiTypes, level], index) => {
       const R = runs.size - 1;
 
       if (runs.getIn([R, 'level'], -1) === level) {

@@ -31,7 +31,8 @@ function parseLevelsLine(line) {
   const tabIndex = line.indexOf('\t');
   return line.slice(tabIndex + 1).split(' ')
     .filter(x => x !== 'x')
-    .filter(x => x !== '');
+    .filter(x => x !== '')
+    .map(x => parseInt(x));
 }
 
 function parseReorderLine(line) {
