@@ -1,12 +1,12 @@
 import { List } from 'immutable';
-import { Pairing } from '../../src/type';
-import { AL1 as AL } from '../../src/util/constant';
-import { ON1 as ON } from '../../src/util/constant';
-import { L1 as L } from '../../src/util/constant';
-import { R1 as R } from '../../src/util/constant';
-import { WS1 as WS } from '../../src/util/constant';
-import { LEFT_PAR, RIGHT_PAR, LEFT_SQUARE, RIGHT_SQUARE } from '../../src/util/constant';
-import resolveBrackets from '../../src/neutral/resolveBrackets';
+import { Pairing } from '../../../src/type';
+import { AL1 as AL } from '../../../src/util/constant';
+import { ON1 as ON } from '../../../src/util/constant';
+import { L1 as L } from '../../../src/util/constant';
+import { R1 as R } from '../../../src/util/constant';
+import { WS1 as WS } from '../../../src/util/constant';
+import { LEFT_PAR, RIGHT_PAR, LEFT_SQUARE, RIGHT_SQUARE } from '../../../src/util/constant';
+import resolveBrackets from '../../../src/neutral/resolveBrackets';
 
 describe('[Neutral] Resolving Neutrals (N0) - Bracket Pairs', () => {
 

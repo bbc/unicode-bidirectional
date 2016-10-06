@@ -1,5 +1,5 @@
 import { List } from 'immutable';
-import enToL from '../../../src/weak/rule/enToL';
+import enToL from '../../../../src/weak/rule/enToL';
 
 const L  = 0x006D // U+006D LATIN SMALL LETTER M
 const R  = 0x05D0 // U+05D0 HEBREW LETTER ALEF

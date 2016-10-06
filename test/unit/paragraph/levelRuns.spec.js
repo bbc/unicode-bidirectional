@@ -1,8 +1,8 @@
 import { List } from 'immutable';
-import { LRE, RLE, LRO, RLO, PDF, LRI, RLI, FSI, PDI } from '../../src/util/constant';
-import { A, B, C, D, E, F, G } from '../../src/util/constant';
-import { Run } from '../../src/type';
-import levelRuns from '../../src/paragraph/levelRuns';
+import { LRE, RLE, LRO, RLO, PDF, LRI, RLI, FSI, PDI } from '../../../src/util/constant';
+import { A, B, C, D, E, F, G } from '../../../src/util/constant';
+import { Run } from '../../../src/type';
+import levelRuns from '../../../src/paragraph/levelRuns';
 
 describe('[Paragraph] - Level Runs', () => {
   it('should find a trivial run', () => {

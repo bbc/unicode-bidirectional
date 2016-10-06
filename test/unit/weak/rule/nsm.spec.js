@@ -1,5 +1,5 @@
 import { List } from 'immutable';
-import nsm from '../../../src/weak/rule/nsm';
+import nsm from '../../../../src/weak/rule/nsm';
 
 const AL =  0x0643 // eg. U+0643 ARABIC LETTER KAF
 const NSM = 0x0652 // eg. U+0652 ARABIC SUKUN

@@ -1,7 +1,7 @@
 import { List, Map } from 'immutable';
-import matchingPDIs from '../../src/paragraph/matchingPDIs';
-import { LRI, RLI, PDI } from '../../src/util/constant';
-import { A, B, C, D } from '../../src/util/constant';
+import matchingPDIs from '../../../src/paragraph/matchingPDIs';
+import { LRI, RLI, PDI } from '../../../src/util/constant';
+import { A, B, C, D } from '../../../src/util/constant';
 
 describe('[Paragraph] Finding matching PDI for a given isolate initiator', () => {
 

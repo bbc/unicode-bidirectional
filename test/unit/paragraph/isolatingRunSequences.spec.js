@@ -1,8 +1,8 @@
 import { List } from 'immutable';
-import { LRE, RLE, LRO, RLO, PDF, LRI, RLI, FSI, PDI } from '../../src/util/constant';
-import { A, B, C, D, E, F, G } from '../../src/util/constant';
-import { Run, Sequence } from '../../src/type';
-import isolatingRunSequences from '../../src/paragraph/isolatingRunSequences';
+import { LRE, RLE, LRO, RLO, PDF, LRI, RLI, FSI, PDI } from '../../../src/util/constant';
+import { A, B, C, D, E, F, G } from '../../../src/util/constant';
+import { Run, Sequence } from '../../../src/type';
+import isolatingRunSequences from '../../../src/paragraph/isolatingRunSequences';
 
 describe('[Paragraph] - Isolating Run Sequences', () => {
   it('should find a trivial sequence', () => {

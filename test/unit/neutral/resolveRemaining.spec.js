@@ -1,8 +1,8 @@
 import { List } from 'immutable';
-import { L1 as L } from '../../src/util/constant';
-import { ON1 as ON } from '../../src/util/constant';
-import { R1 as R } from '../../src/util/constant';
-import resolveRemaining from '../../src/neutral/resolveRemaining';
+import { L1 as L } from '../../../src/util/constant';
+import { ON1 as ON } from '../../../src/util/constant';
+import { R1 as R } from '../../../src/util/constant';
+import resolveRemaining from '../../../src/neutral/resolveRemaining';
 
 const __ = 'L'; // a bidi type we "dont care" about
 

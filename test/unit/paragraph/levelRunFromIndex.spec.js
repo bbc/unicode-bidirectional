@@ -1,6 +1,6 @@
 import { List } from 'immutable';
-import { Run } from '../../src/type';
-import levelRunFromIndex from '../../src/paragraph/levelRunFromIndex';
+import { Run } from '../../../src/type';
+import levelRunFromIndex from '../../../src/paragraph/levelRunFromIndex';
 
 describe('[Paragraph] Finding level run from isolating run sequence by index', () => {
 

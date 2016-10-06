@@ -1,6 +1,6 @@
-import matchingPDIForIndex from '../../src/paragraph/matchingPDIForIndex';
-import { LRE, RLE, LRO, RLO, PDF, LRI, RLI, FSI, PDI } from '../../src/util/constant';
-import { A, B, C, D, E, F, G } from '../../src/util/constant';
+import matchingPDIForIndex from '../../../src/paragraph/matchingPDIForIndex';
+import { LRE, RLE, LRO, RLO, PDF, LRI, RLI, FSI, PDI } from '../../../src/util/constant';
+import { A, B, C, D, E, F, G } from '../../../src/util/constant';
 import { List } from 'immutable';
 
 describe('[Paragraph] Matching PDI for given Isolate Initiator', () => {

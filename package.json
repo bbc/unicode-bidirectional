@@ -4,7 +4,8 @@
   "description": "*An implementation of Unicode 9.0.0 Bidirectional Algorithm*",
   "main": "weak.js",
   "scripts": {
-    "test": "mocha --compilers js:babel-register -r test/spec.helper.js 'test/**/*.spec.js'"
+    "test": "npm run unit",
+    "unit": "mocha --compilers js:babel-register -r test/unit/spec.helper.js 'test/unit/**/*.spec.js'"
   },
   "babel": {
     "presets": [

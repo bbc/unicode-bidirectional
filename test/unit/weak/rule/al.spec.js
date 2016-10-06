@@ -1,5 +1,5 @@
 import { List } from 'immutable';
-import al from '../../../src/weak/rule/al';
+import al from '../../../../src/weak/rule/al';
 
 describe('Resolving Weak Types - AL (Arabic Letter)', () => {
   it('should change all ALs to R', () => {

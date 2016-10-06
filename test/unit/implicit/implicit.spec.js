@@ -1,5 +1,5 @@
 import { List } from 'immutable';
-import resolveImplicit from '../../src/implicit/implicit';
+import resolveImplicit from '../../../src/implicit/implicit';
 
 describe('Resolving Implicit Levels', () => {
   it('should increase ANs at an odd embedding level by one', () => {
