@@ -4,8 +4,10 @@ import { isX9ControlCharacter } from '../util/constant';
 import unzip from '../util/unzip';
 import runOffsets from './runOffsets';
 
-function resolvedLevels(paragraphCodepoints, paragraphBidiTypes, paragraphLevel = 0) {
-  const sequences = isolatingRunSequences(paragraphCodepoints, paragraphBidiTypes, paragraphLevel);
+function resolvedLevels(paragraphCodepoints, paragraphBidiTypes, paragraphLevel, autoLTR = false) {
+  const level = (autoLTR) ? automaticLevel(paragraphCodepoints) : paragraphLevel;
+  const sequences = isolatingRunSequences(paragraphCodepoints, paragraphBidiTypes, level);
+
   const [codepoints, bidiTypes] = unzip(paragraphCodepoints
     .zip(paragraphBidiTypes)
     .filter(([__, t]) => isX9ControlCharacter(t) === false)); // [1]

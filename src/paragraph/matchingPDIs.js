@@ -12,6 +12,7 @@ function matchingPDIs(codepoints) {
   const tuplesInverted = tuples.map(([x, y]) => [y, x]);
 
   const initiatorToPDI = Map(tuples); // [1]
+  // TODO: it is possible to use Map.flip()?
   const initiatorFromPDI = Map(tuplesInverted); // [2]
   return { initiatorToPDI, initiatorFromPDI };
 }

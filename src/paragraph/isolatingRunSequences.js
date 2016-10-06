@@ -18,6 +18,7 @@ function isolatingRunSequences(codepointsWithX9, bidiTypesWithX9, paragraphLevel
   const { initiatorToPDI, initiatorFromPDI } = matchingPDIs(codepoints);
   const runs = levelRuns(codepointsWithX9, bidiTypesWithX9, paragraphLevel);
 
+
   function isolatingChainFrom(sequence) {
       // [1]: level run currently last in the sequence
       //      ends with an isolate initiator that has a matching PDI

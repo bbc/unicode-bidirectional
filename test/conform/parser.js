@@ -19,7 +19,7 @@ function parseFile(file) {
         levels: levels.slice(),
         reorder: reorder.slice(),
         bidiTypes: data[0],
-        bitSet: data[1]
+        bitset: data[1]
       });
     }
     cursor++;

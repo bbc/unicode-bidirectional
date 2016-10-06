@@ -23,21 +23,25 @@ function runLevelTests() {
   let fail = 0;
   const total = testCases.length;
 
-  testCases.forEach(function(test, index) {
+  testCases.slice(20, 21).forEach(function(test, index) {
     // fill in with arbitrary codepoints matching bidiType
-    // const codepoints =
-    // const paragraphDirection =
-    // const actual = resolvedWeaks(fillWithCodepoints(bidiTypes), bidiTypes, 0);
+
     const bidiTypes = fromJS(test.bidiTypes);
-    const actual = resolvedLevels(fillWithCodepoints(bidiTypes), bidiTypes, 0)
+    const codepoints = fillWithCodepoints(bidiTypes);
+
+    const bitset = test.bitset;
+    const paragraphLevel = ((bitset & 2) > 0) ? 0 : 1;
+    const autoLTR = ((bitset & 1) > 0) ? true : false;
+
+    const actual = resolvedLevels(codepoints, bidiTypes, paragraphLevel, autoLTR)
     const expected = fromJS(test.levels);
     if (actual.equals(expected)) {
       pass = pass + 1;
     } else {
       fail = fail + 1;
-      // console.log('INPUT:', bidiTypes);
-      // console.log('ACTUAL OUTPUT:', actual);
-      // console.log('EXPECTED OUTPUT:', expected);
+      console.log('INPUT:', bidiTypes);
+      console.log('ACTUAL OUTPUT:', actual);
+      console.log('EXPECTED OUTPUT:', expected);
     }
 
     const progress = [
@@ -48,9 +52,9 @@ function runLevelTests() {
       '(', Math.floor((index+1)/total*100), '%)',
       '\n'
     ].join('');
+    process.stdout.clearLine(1);
     process.stdout.cursorTo(0);
     process.stdout.write(progress);
-    process.stdout.clearLine(1);
   });
   // console.log('\nTests finished');
   // console.log('Passing: ' + pass + ' Failing: ' + fail);
