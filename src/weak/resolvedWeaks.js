@@ -2,7 +2,9 @@ import { List, Record } from 'immutable';
 import { nsm, en, al, es, et, on, enToL } from './rule/rules';
 import isolatingRunSequences from '../paragraph/isolatingRunSequences';
 import unzip from '../util/unzip';
-import { resolveBrackets, resolveIsolates, resolveRemaining } from '../neutral/neutral';
+import resolveIsolates from '../neutral/resolveIsolates';
+import resolveBrackets from '../neutral/resolveBrackets';
+import resolveRemaining from '../neutral/resolveRemaining';
 
 function resolvedWeaks(paragraphCodepoints, paragraphBidiTypes, paragraphLevel = 0) {
   const sequences = isolatingRunSequences(paragraphCodepoints, paragraphBidiTypes, paragraphLevel);
