@@ -5,7 +5,8 @@
   "main": "weak.js",
   "scripts": {
     "test": "npm run unit",
-    "unit": "mocha --compilers js:babel-register -r test/unit/spec.helper.js 'test/unit/**/*.spec.js'"
+    "unit": "mocha --compilers js:babel-register -r test/unit/spec.helper.js 'test/unit/**/*.spec.js'",
+    "conform": "node ./test/conform/parser.js"
   },
   "babel": {
     "presets": [
@@ -41,6 +42,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "chai-immutable": "^1.6.0",
-    "mocha": "^3.0.2"
+    "mocha": "^3.0.2",
+    "parsimmon": "^0.9.2"
   }
 }
