@@ -1,5 +1,5 @@
 import isUndefined from 'lodash.isundefined';
-import bracketPairs from '../bracket/bracketPairs';
+import bracketPairs from './bracketPairs';
 
 // http://unicode.org/reports/tr9/#N0
 function resolveBrackets(bidiTypes, points, sos, eos, level) {

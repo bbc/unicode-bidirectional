@@ -1,10 +1,10 @@
 import { List } from 'immutable';
-import bracketPairs from '../../src/bracket/bracketPairs';
 import { Pairing } from '../../src/type';
 import { A, B, C, D } from '../../src/util/constant'
 import { LEFT_PAR, RIGHT_PAR } from '../../src/util/constant'
 import { LEFT_SQUARE, RIGHT_SQUARE } from '../../src/util/constant'
 import { LEFT_CURLY, RIGHT_CURLY } from '../../src/util/constant'
+import bracketPairs from '../../src/neutral/bracketPairs';
 
 describe('Bracket Pairs', () => {
 
