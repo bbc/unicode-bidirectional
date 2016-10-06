@@ -1,9 +1,7 @@
 # unicode-bidirectional
 
-*An implementation of Unicode 9.0.0 Bidirectional Algorithm*
+*An implementation of [Unicode 9.0.0 Bidirectional Algorithm](http://www.unicode.org/reports/tr9/)*
 
-The algorithm is a deviation of the explicit algorithm (which forms the normative statement for conformance).
-This implementation retains BNs and Explicit Formatting Characters as described in [5.2 Retaining BNs and Explicit Formatting Characters](http://unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters).
 
 ## Testing
 
