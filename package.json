@@ -6,7 +6,7 @@
   "scripts": {
     "test": "npm run unit",
     "unit": "mocha --compilers js:babel-register -r test/unit/spec.helper.js 'test/unit/**/*.spec.js'",
-    "conform": "node ./test/conform/parser.js"
+    "conform": "babel-node ./test/conform/runner.js"
   },
   "babel": {
     "presets": [
@@ -40,6 +40,7 @@
     "lodash.isundefined": "^3.0.1"
   },
   "devDependencies": {
+    "babel-cli": "^6.16.0",
     "chai": "^3.5.0",
     "chai-immutable": "^1.6.0",
     "mocha": "^3.0.2",

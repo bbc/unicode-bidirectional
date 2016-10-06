@@ -1,23 +1,50 @@
-const List = require('immutable').List;
-const fs = require('fs');
-const path = require('path');
-// const P = require('parsimmon');
-const filepath = path.resolve(__dirname, 'BidiTest.txt');
-const file = fs.readFileSync(filepath, 'utf8');
-const isUndefined = require('lodash.isundefined');
+function parseFile(file) {
+  let testCases = [];
+  const lines = file.split('\n').filter(line => line.startsWith('#') === false);
 
-// [1]: remove comments
-const withoutPreamble = file.split('\n')
-  .filter(line => line.startsWith('#') === false) // [1]
-  .filter(line => line.length > 0);
+  let cursor = 0;
+  let EOF = lines.length;
+  let levels = [];
+  let reorder = [];
 
-// console.log(withoutPreamble.slice(0, 100));
+  while (cursor < EOF) {
+    let line = lines[cursor];
 
-function groups(lines) {
-  if (!isUndefined(lines) || lines.isEmpty()) return List.of();
-  const group = lines.takeUntil(line => line.startsWith('@'));
-  const after = lines.skipWhile(line => line.startsWith('@'));
-  return List.of(group).push(groups(after));
+    if (line.startsWith('@Levels')) { levels = parseLevelsLine(line); }
+    else if (line.startsWith('@Reorder')) { reorder = parseReorderLine(line); }
+    else if (line.length > 0) {
+      const data = parseDataLine(line);
+
+      testCases.push({
+        levels: levels.slice(),
+        reorder: reorder.slice(),
+        bidiTypes: data[0],
+        bitSet: data[1]
+      });
+    }
+    cursor++;
+  }
+  return testCases;
 }
 
-// console.log(groups(withoutPreamble).slice(0, 10));
+function parseLevelsLine(line) {
+  const tabIndex = line.indexOf('\t');
+  return line.slice(tabIndex + 1).split(' ')
+    .filter(x => x !== 'x')
+    .filter(x => x !== '');
+}
+
+function parseReorderLine(line) {
+  const tabIndex = line.indexOf('\t');
+  return line.slice(tabIndex + 1).split(' ')
+    .filter(x => x !== '');
+}
+
+function parseDataLine(line) {
+  const separator = line.indexOf(';');
+  const bidiTypes = line.slice(0, separator).split(' ');
+  const bitset = parseInt(line.slice(separator + 1));
+  return [bidiTypes, bitset];
+}
+
+module.exports = parseFile;

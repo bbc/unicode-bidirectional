@@ -1,6 +1,7 @@
 import { List, Record } from 'immutable';
 import { nsm, en, al, es, et, on, enToL } from './rule/rules';
 import isolatingRunSequences from '../paragraph/isolatingRunSequences';
+import { isX9ControlCharacter } from '../util/constant';
 import unzip from '../util/unzip';
 import resolveIsolates from '../neutral/resolveIsolates';
 import resolveBrackets from '../neutral/resolveBrackets';
@@ -8,9 +9,17 @@ import resolveRemaining from '../neutral/resolveRemaining';
 
 function resolvedWeaks(paragraphCodepoints, paragraphBidiTypes, paragraphLevel = 0) {
   const sequences = isolatingRunSequences(paragraphCodepoints, paragraphBidiTypes, paragraphLevel);
+
+  // [1]: By X9., we remove control characters that are not
+  //      needed at this stage in bidi algorithm
+  //      TODO: move to util/
+  const [codepoints, bidiTypes] = unzip(paragraphCodepoints
+    .zip(paragraphBidiTypes)
+    .filter(([__, t]) => isX9ControlCharacter(t) === false)); // [1]
+
   return sequences.reduce((types, sequence) => {
-    return resolvedWeaksForSequence(paragraphCodepoints, types, sequence);
-  }, paragraphBidiTypes);
+    return resolvedWeaksForSequence(codepoints, types, sequence);
+  }, bidiTypes);
 }
 
 // X10.
@@ -21,6 +30,7 @@ function resolvedWeaksForSequence(codepoints, bidiTypes, sequence) {
   // merge together all the codepoint-slices and bidiType-slices
   // that each run in the sequence take
   const paragraph = codepoints.zip(bidiTypes);
+  console.log(bidiTypes);
   const [ codepointsFromSequence, bidiTypesFromSequence ] = unzip(
     sequence.get('runs').map(run => {
       const { from, to } = run.toJS();
