@@ -12,7 +12,7 @@ function lre(ch, bidiType, index, state) {
       return state.setIn(['embeddingLevels', 'levels', index], lastLevel);
     },
     function(state) {
-      const newLevel = lastLevel + (lastLevel % 2);
+      const newLevel = (lastLevel + 1) + ((lastLevel + 1) % 2);
       const newLevelInvalid = (newLevel >= MAX_DEPTH); // [2]
 
       const isolate = state.get('overflowIsolateCount');

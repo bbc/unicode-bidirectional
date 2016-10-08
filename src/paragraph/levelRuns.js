@@ -21,7 +21,7 @@ function levelRuns(codepoints, bidiTypes, paragraphLevel = 0) {
     lro,   // X5.
     rli,   // X5a.
     lri,   // X5b.
-    //fsi  // X5c.
+    fsi    // X5c.
     other, // X6.
     pdi,   // X6a.
     pdf    // X7.

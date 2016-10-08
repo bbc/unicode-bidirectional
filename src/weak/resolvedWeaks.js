@@ -36,7 +36,7 @@ function resolvedWeaksForSequence(codepoints, bidiTypes, sequence) {
     et,  // W5.
     on,  // W6.
     enToL, // W7.
-    resolveBrackets, // N0
+    resolveIsolates, // N0
     resolveBrackets, // N1
     resolveRemaining // N2
   ]; // [1]

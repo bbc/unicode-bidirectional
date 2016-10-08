@@ -33,7 +33,7 @@ function lri(ch, bidiType, index, state) {
       }
     },
     function increaseLevel(state) {
-      const newLevel = (lastLevel) + (lastLevel % 2);
+      const newLevel = (lastLevel + 1) + ((lastLevel + 1) % 2);
       const newLevelInvalid = (newLevel >= MAX_DEPTH); // [2]
       const isOverflow = (newLevelInvalid || isCurrentlyOverflowing(state)); // [2]
 

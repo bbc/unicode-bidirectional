@@ -24,6 +24,7 @@ function fillWithCodepoints(bidiTypes) {
     if (t === 'LRE') return LRE;
     if (t === 'LRI') return LRI;
     if (t === 'LRM') return LRM;
+    if (t === 'LRO') return LRO;
     if (t === 'ON') return ON;
     if (t === 'PDF') return PDF;
     if (t === 'PDI') return PDI;

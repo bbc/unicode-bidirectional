@@ -16,7 +16,7 @@ function resolvedLevels(paragraphCodepoints, paragraphBidiTypes, paragraphLevel,
     codepoints, // without embeds
     bidiTypes, // without embeds, with X1-X8 applied
     paragraphBidiTypes: pbidi, // without embeds
-    levels // without embeds..>
+    levels // with embeds..
   } = isolatingRunSequences(paragraphCodepoints, paragraphBidiTypes, level);
 
   const resolvedTypes = resolvedWeaks(codepoints, bidiTypes, sequences);
