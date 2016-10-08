@@ -3,28 +3,21 @@ const path = require('path');
 const filepath = path.resolve(__dirname, 'BidiTest.txt');
 const parseFile = require('./parser');
 const fromJS = require('immutable').fromJS;
-// import resolvedWeaks from '../../src/weak/resolvedWeaks';
 import resolvedLevels from '../../src/resolve/resolvedLevels';
 import fillWithCodepoints from './fillWithCodepoints';
 
-// import chai from 'chai';
-// import chaiImmutable from 'chai-immutable';
-// chai.use(chaiImmutable);
-// const expect = chai.expect;
-
 function runLevelTests() {
-  // console.log('[Conformance Test] - Level Tests');
-  // console.log('Parsing test data...');
+  console.log('[Conformance Test] - Level Tests');
+  console.log('Parsing test data...');
   const file = fs.readFileSync(filepath, 'utf8');
   const testCases = parseFile(file);
 
-  // console.log('Running level tests...');
+  console.log('Running level tests...');
   let pass = 0;
   let fail = 0;
   const total = testCases.length;
 
-  testCases.slice(0, 262).forEach(function(test, index) {
-    // fill in with arbitrary codepoints matching bidiType
+  testCases.slice(0, 331).forEach(function(test, index) {
 
     const bidiTypes = fromJS(test.bidiTypes);
     const codepoints = fillWithCodepoints(bidiTypes);

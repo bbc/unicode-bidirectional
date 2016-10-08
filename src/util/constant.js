@@ -48,6 +48,9 @@ const EN1 = 0x0032 // U+0032 DIGIT TWO
 // Examples of WS (Whitespace)
 const WS1 = 0x0020 // U+0032 SPACE
 
+// Examples of S (Segment Separator)
+const S1 = 0x0009 // U+0009 CHARACTER TABULATION
+
 const LEFT_CURLY = 0x007B;
 const LEFT_PAR = 0x0028;
 const LEFT_SQUARE = 0x005B;
@@ -92,6 +95,7 @@ export {
   ALM, FSI, LRE, LRI, LRM, LRO, PDF, PDI, RLE, RLI, RLM, RLO,
   A, B, C, D, E, F, G,
   B1,
+  S1,
   L1,
   ON1,
   AN1,
