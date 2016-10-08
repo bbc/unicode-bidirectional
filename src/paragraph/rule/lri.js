@@ -13,7 +13,7 @@ function isCurrentlyOverflowing(state) {
 // [1]: "Set the LRI’s embedding level to the embedding level
 //      of the last entry on the directional status stack."
 // [2]:
-function lri(ch, index, state) {
+function lri(ch, bidiType, index, state) {
   if (ch !== LRI) return state;
   const lastEntry = state.get('directionalStatusStack').peek();
   const lastLevel = lastEntry.get('level');

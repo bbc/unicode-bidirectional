@@ -14,7 +14,7 @@ import { decrease } from '../../type';
 //       - Set the PDI’s level to the entry's embedding level.
 //       - If the entry's directional override status is not neutral, reset the current character type from PDI to
 //       L if the override status is left-to-right, and to R if the override status is right-to-left."
-function pdi(ch, index, state) {
+function pdi(ch, bidiType, index, state) {
   if (ch !== PDI) return state;
   const isolateOverflow = state.get('overflowIsolateCount');
   const validIsolateCount = state.get('validIsolateCount');

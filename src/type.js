@@ -15,10 +15,12 @@ const DirectionalStatusStackEntry = Record({
   level: 0,
   override: 'neutral'
 });
+
+// [1]: TODO: use Immutable.Range(0, Infinity).map(n => 0)
 const EmbeddingLevelState = Record({
   directionalStatusStack: Stack.of(new DirectionalStatusStackEntry()), // [1,2]
-  bidiTypes: List.of(),
-  embeddingLevels: List.of(),
+  bidiTypes: List.of(), // [1]
+  embeddingLevels: List.of(), // [1]
   overflowEmbeddingCount: 0,
   overflowIsolateCount: 0,
   validIsolateCount: 0

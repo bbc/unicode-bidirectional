@@ -24,6 +24,9 @@ const G = 0x0047; // U+0044 LATIN CAPITAL LETTER G
 // Examples of BN (Boundary Neutral)
 const BN1 = 0x0000
 
+// Examples of B (Paragraph Separator)
+const B1 = 0x2029
+
 // Examples of L (Left-to-right)
 const L1  = 0x006D // U+006D LATIN SMALL LETTER M
 
@@ -82,10 +85,13 @@ const isIsolateInitiator = (t) => includes(['LRI', 'RLI', 'FSI'], t); // [1]
 const isPDI = (point) => point === 0x2069; // [2]
 const isStrong = (t) => includes(['L', 'R', 'AL'], t);
 const isX9ControlCharacter = (t) => includes(['RLE', 'LRE', 'RLO', 'LRO', 'PDF', 'BN'], t);
+const isNonFormatting  = (t) =>
+  includes(['B', 'BN', 'RLE', 'LRE', 'RLO', 'LRO', 'PDF', 'RLI', 'LRI', 'FSI', 'PDI'], t);
 
 export {
   ALM, FSI, LRE, LRI, LRM, LRO, PDF, PDI, RLE, RLI, RLM, RLO,
   A, B, C, D, E, F, G,
+  B1,
   L1,
   ON1,
   AN1,
@@ -105,4 +111,5 @@ export {
   isPDI,
   isStrong,
   isX9ControlCharacter,
+  isNonFormatting
 }

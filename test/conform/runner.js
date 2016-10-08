@@ -23,7 +23,7 @@ function runLevelTests() {
   let fail = 0;
   const total = testCases.length;
 
-  testCases.slice(0, 260).forEach(function(test, index) {
+  testCases.slice(0, 262).forEach(function(test, index) {
     // fill in with arbitrary codepoints matching bidiType
 
     const bidiTypes = fromJS(test.bidiTypes);

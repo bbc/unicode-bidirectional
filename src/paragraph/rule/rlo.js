@@ -1,6 +1,6 @@
 import { MAX_DEPTH, RLO } from '../../util/constant';
 
-function rlo(ch, index, state) {
+function rlo(ch, bidiType, index, state) {
   if (ch !== RLO) return state;
   const lastEmbeddingLevel = state.get('directionalStatusStack').peek().get('level');
   const isolate = state.get('overflowIsolateCount');

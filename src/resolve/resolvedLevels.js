@@ -8,7 +8,7 @@ import resolveImplicit from '../implicit/implicit';
 import resolvedWeaks from '../weak/resolvedWeaks';
 
 function resolvedLevels(paragraphCodepoints, paragraphBidiTypes, paragraphLevel, autoLTR = false) {
-  const level = (autoLTR) ? automaticLevel(paragraphCodepoints, paragraphBidiTypes) : paragraphLevel;
+  const level = (autoLTR === true) ? automaticLevel(paragraphCodepoints, paragraphBidiTypes) : paragraphLevel;
   const sequences = isolatingRunSequences(paragraphCodepoints, paragraphBidiTypes, level);
   const resolvedTypes = resolvedWeaks(paragraphCodepoints, paragraphBidiTypes, level);
 

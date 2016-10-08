@@ -3,7 +3,7 @@ import { decrease } from '../../type';
 import flow from 'lodash.flow';
 
 // http://unicode.org/reports/tr9/#X7
-function pdf(ch, index, state) {
+function pdf(ch, bidiType, index, state) {
   if (ch !== PDF) return state;
 
   return flow(

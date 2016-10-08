@@ -38,7 +38,7 @@ describe('[Paragraph] - Level Runs', () => {
 
   it('should find level runs for "A·RLI·B·LRI·C·RLE·D·PDF·E·PDI·F·PDI·G"', () => {
     const codepoints = List.of(A, RLI, B, LRI, C, RLE, D, PDF, E, PDI, F, PDI, G);
-    const bidiTypes = List.of('L', 'RLI', 'L', 'LRI', 'L', 'RLE', 'L', 'PDF', 'L', 'PDI', 'PDI', 'L', 'PDI', 'L');
+    const bidiTypes = List.of('L','RLI','L','LRI','L','RLE','L','PDF','L','PDI','L','PDI','L');
     const runs = List.of(
       new Run({ level: 0, from: 0, to: 2 }), // A, RLI
       new Run({ level: 1, from: 2, to: 4 }), // B, LRI

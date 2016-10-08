@@ -6,7 +6,7 @@ import flow from 'lodash.flow';
 // [1]: "Compute the least odd embedding level greater than the embedding level of
 //       the last entry on the directional status stack"
 // [2]: at max_depth or if either overflow count is non-zero, the level remains the same (overflow RLE).
-function rle(ch, index, state) {
+function rle(ch, bidiType, index, state) {
   if (ch !== RLE) return state;
 
   const lastLevel = state.get('directionalStatusStack').peek().get('level');

@@ -3,7 +3,7 @@ import { LRE, MAX_DEPTH } from '../../util/constant';
 import { DirectionalStatusStackEntry } from '../../type';
 
 // http://unicode.org/reports/tr9/#X3
-function lre(ch, index, state) {
+function lre(ch, bidiType, index, state) {
   if (ch !== LRE) return state;
 
   const lastLevel = state.get('directionalStatusStack').peek().get('level');

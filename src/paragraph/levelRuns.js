@@ -10,7 +10,6 @@ import { isX9ControlCharacter } from '../util/constant';
 // BD7.
 // [1]: Apply rules X1-X8 to compute the embedding levels
 // [2]: Process each character iteratively, applying rules X2 through X8.
-// [3]: Each rule has type: (Character, Index, EmbeddingLevelState) -> EmbeddingLevelState
 // [4]: Some rules modify the bidi types list and embedding levels
 // [5]: Compute the runs by grouping adjacent characters with same the level numbers
 //      with the exception of RLE, LRE and PDF which are stripped from output
@@ -33,9 +32,10 @@ function levelRuns(codepoints, bidiTypes, paragraphLevel = 0) {
     .set('bidiTypes', bidiTypes) // [4]
     .set('embeddingLevels', codepoints.map(__ => paragraphLevel)); // [4]
 
-  const finalState = codepoints.reduce((state, ch, index) => { // [2]
-    return rules.reduce((s, rule) => rule(ch, index, s), state);
-  }, initial);
+  const finalState = codepoints.zip(bidiTypes)
+    .reduce((state, [codepoint, bidiType], index) => { // [2]
+      return rules.reduce((s, rule) => rule(codepoint, bidiType, index, s), state);
+    }, initial);
 
   return codepoints // [5]
     .zip(bidiTypes, finalState.get('embeddingLevels'))

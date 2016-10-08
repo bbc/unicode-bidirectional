@@ -1,14 +1,29 @@
+import flow from 'lodash.flow';
 import includes from 'lodash.includes';
-import { LRE, RLE, LRO, RLO, PDF, LRI, RLI, FSI, PDI } from '../../util/constant';
+import { isNonFormatting } from '../../util/constant';
 
-function other(ch, index, state) {
-  if (!includes([RLE, LRE, RLO, LRO, RLI, LRI, PDI, PDF], ch)) {
-    const lastEntry = state.get('directionalStatusStack').peek();
-    const lastLevel = lastEntry.get('level');
-    return state.update('embeddingLevels', ls => ls.set(index, lastLevel))
-  } else {
-    return state;
-  }
+// TODO: change name of this function to 'setLevel'
+function other(ch, bidiType, index, state) {
+  if (isNonFormatting(bidiType)) return state;
+
+  const lastEntry = state.get('directionalStatusStack').peek();
+  const lastLevel = lastEntry.get('level');
+
+  return flow(
+    function setEmbedding(state) { // [1]
+      return state.update('embeddingLevels', ls => ls.set(index, lastLevel))
+    },
+    function checkOverride(state) {
+      const lastOverride = lastEntry.get('override');
+
+      if (lastOverride !== 'neutral') {
+        const override = (lastOverride === 'left-to-right') ? 'L' : 'R';
+        return state.update('bidiTypes', ts => ts.set(index, 'R'))
+      } else {
+        return state;
+      }
+    }
+  )(state);
 }
 
 export default other;
