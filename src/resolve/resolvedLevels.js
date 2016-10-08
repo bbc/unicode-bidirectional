@@ -11,17 +11,20 @@ import whitespacesLevelReset from './whitespacesLevelReset';
 
 function resolvedLevels(paragraphCodepoints, paragraphBidiTypes, paragraphLevel, autoLTR = false) {
   const level = (autoLTR === true) ? automaticLevel(paragraphCodepoints, paragraphBidiTypes) : paragraphLevel;
-  const sequences = isolatingRunSequences(paragraphCodepoints, paragraphBidiTypes, level);
-  const resolvedTypes = resolvedWeaks(paragraphCodepoints, paragraphBidiTypes, level);
+  const {
+    sequences, // without embeds
+    codepoints, // without embeds
+    bidiTypes, // without embeds, with X1-X8 applied
+    paragraphBidiTypes: pbidi, // without embeds
+    levels // without embeds..>
+  } = isolatingRunSequences(paragraphCodepoints, paragraphBidiTypes, level);
 
-  const [codepoints, bidiTypes] = unzip(paragraphCodepoints
-    .zip(paragraphBidiTypes)
-    .filter(([__, t]) => isX9ControlCharacter(t) === false)); // [1]
-
-  const N = codepoints.size;
+  const resolvedTypes = resolvedWeaks(codepoints, bidiTypes, sequences);
+  const N = bidiTypes.size;
   const sequenceResolved = sequences.reduce(updateLevelsFromRuns, List(Range(0, N)).map(__ => 0));
   const resolvedImplicit = resolveImplicit(resolvedTypes, sequenceResolved);
-  return whitespacesLevelReset(bidiTypes, resolvedImplicit, level);
+
+  return whitespacesLevelReset(pbidi, resolvedImplicit, level);
 }
 
 function updateLevelsFromRuns(levels, sequence) {

@@ -7,16 +7,7 @@ import resolveIsolates from '../neutral/resolveIsolates';
 import resolveBrackets from '../neutral/resolveBrackets';
 import resolveRemaining from '../neutral/resolveRemaining';
 
-function resolvedWeaks(paragraphCodepoints, paragraphBidiTypes, paragraphLevel = 0) {
-  const sequences = isolatingRunSequences(paragraphCodepoints, paragraphBidiTypes, paragraphLevel);
-
-  // [1]: By X9., we remove control characters that are not
-  //      needed at this stage in bidi algorithm
-  //      TODO: move to util/
-  const [codepoints, bidiTypes] = unzip(paragraphCodepoints
-    .zip(paragraphBidiTypes)
-    .filter(([__, t]) => isX9ControlCharacter(t) === false)); // [1]
-
+function resolvedWeaks(codepoints, bidiTypes, sequences) {
   return sequences.reduce((types, sequence) => {
     return resolvedWeaksForSequence(codepoints, types, sequence);
   }, bidiTypes);

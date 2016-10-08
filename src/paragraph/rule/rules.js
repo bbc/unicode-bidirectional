@@ -1,7 +1,7 @@
 import { rle } from './rle';
 import lre from './lre';
 import rlo from './rlo';
-function lro(ch, index, state) { return state; }
+import lro from './lro';
 import { rli } from './rli';
 import { lri } from './lri';
 function fsi(ch, index, state) { return state; }
@@ -12,8 +12,8 @@ import { pdf } from './pdf';
 export {
   rle,   // X2.
   lre,   // X3.
-  //rlo  // X4.
-  //lro  // X5.
+  rlo,   // X4.
+  lro,   // X5.
   rli,   // X5a.
   lri,   // X5b.
   //fsi  // X5c.

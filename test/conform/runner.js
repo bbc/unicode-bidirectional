@@ -17,7 +17,7 @@ function runLevelTests() {
   let fail = 0;
   const total = testCases.length;
 
-  testCases.slice(0, 331).forEach(function(test, index) {
+  testCases.slice(0, 377).forEach(function(test, index) {
 
     const bidiTypes = fromJS(test.bidiTypes);
     const codepoints = fillWithCodepoints(bidiTypes);
@@ -41,7 +41,7 @@ function runLevelTests() {
       ' Total: ', total, ' ',
       '\x1b[32m', 'Passing: ', pass, ' ', '\x1b[0m',
       '\x1b[31m', 'Failing: ', fail, ' ', '\x1b[0m',
-      '(', Math.floor((index+1)/total*100), '%)',
+      '(', Math.floor((index + 1)/total * 100), '%)',
       '\n'
     ].join('');
     process.stdout.clearLine(1);

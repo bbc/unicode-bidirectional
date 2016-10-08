@@ -13,7 +13,7 @@ describe('[Paragraph] - Isolating Run Sequences', () => {
         new Run({ level: 0, from: 0, to: 3 }) // A, B, C
       )})
     );
-    expect(isolatingRunSequences(codepoints, bidiTypes)).to.equal(sequences);
+    expect(isolatingRunSequences(codepoints, bidiTypes).sequences).to.equal(sequences);
   });
 
   it('should find the sequences for "A·RLI·B·PDI·RLI·C·PDI·D"', () => {
@@ -32,7 +32,7 @@ describe('[Paragraph] - Isolating Run Sequences', () => {
         new Run({ level: 1, from: 5, to: 6 })) // C
       })
     );
-    expect(isolatingRunSequences(codepoints, types)).to.equal(sequences);
+    expect(isolatingRunSequences(codepoints, types).sequences).to.equal(sequences);
   });
 
   it('should find the sequences for "A·RLI·B·LRI·C·RLE·D·PDF·E·PDI·F·PDI·G"', () => {
@@ -57,7 +57,7 @@ describe('[Paragraph] - Isolating Run Sequences', () => {
         new Run({ level: 2, from: 6, to: 7 }))  // E
       })
     );
-    expect(isolatingRunSequences(codepoints, ts)).to.equal(sequences);
+    expect(isolatingRunSequences(codepoints, ts).sequences).to.equal(sequences);
   });
 
   it('should find the sequences for "A·RLE·B·LRE·C·PDF·D·PDF·RLE·E·PDF·F"', () => {
@@ -70,7 +70,7 @@ describe('[Paragraph] - Isolating Run Sequences', () => {
       new Sequence({ sos: 'L', eos: 'R', runs: List.of(new Run({ level: 1, from: 3, to: 5 }),)}),
       new Sequence({ sos: 'R', eos: 'L', runs: List.of(new Run({ level: 0, from: 5, to: 6 })) }),
     );
-    expect(isolatingRunSequences(codepoints, types)).to.equal(sequences);
+    expect(isolatingRunSequences(codepoints, types).sequences).to.equal(sequences);
   });
 
   it('should find the sequences for "A·RLI·B·LRI·C·PDI·D·PDI·RLI·E·PDI·F"', () => {
@@ -93,7 +93,7 @@ describe('[Paragraph] - Isolating Run Sequences', () => {
         new Run({ level: 1, from: 9, to: 10 }))
       })
     );
-    expect(isolatingRunSequences(codepoints, types)).to.equal(sequences);
+    expect(isolatingRunSequences(codepoints, types).sequences).to.equal(sequences);
   });
 
 });

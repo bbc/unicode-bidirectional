@@ -1,6 +1,6 @@
 import { Range, List } from 'immutable';
 import levelRuns from './levelRuns';
-import unzip from '../util/unzip';
+import unzip3 from '../util/unzip3';
 import matchingPDIs from './matchingPDIs';
 import levelRunFromIndex from './levelRunFromIndex';
 import { isX9ControlCharacter } from '../util/constant';
@@ -8,16 +8,17 @@ import { PDI } from '../util/constant';
 import { Sequence } from '../type';
 
 // BD13.
-function isolatingRunSequences(codepointsWithX9, bidiTypesWithX9, paragraphLevel = 0) {
+function isolatingRunSequences(paragraphCodepoints, paragraphBidiTypes, paragraphLevel = 0) {
   // [1]: By X9., we remove control characters that are not
   //      needed at this stage in bidi algorithm
-  const [codepoints, bidiTypes] = unzip(codepointsWithX9
-    .zip(bidiTypesWithX9)
-    .filter(([__, t]) => isX9ControlCharacter(t) === false)); // [1]
+
+  const { runs, bidiTypes, levels } = levelRuns(paragraphCodepoints, paragraphBidiTypes, paragraphLevel);
+
+  const [codepoints, bidi, pbidi] = unzip3(paragraphCodepoints
+    .zip(bidiTypes, paragraphBidiTypes)
+    .filter(([__, t, ___]) => isX9ControlCharacter(t) === false));
 
   const { initiatorToPDI, initiatorFromPDI } = matchingPDIs(codepoints);
-  const runs = levelRuns(codepointsWithX9, bidiTypesWithX9, paragraphLevel);
-
 
   function isolatingChainFrom(sequence) {
       // [1]: level run currently last in the sequence
@@ -59,7 +60,7 @@ function isolatingRunSequences(codepointsWithX9, bidiTypesWithX9, paragraphLevel
     });
   }
 
-  return sequencesWithSosEos(runs
+  const sequences = sequencesWithSosEos(runs
     .filter(run => {
       const from = run.get('from');
       const firstChar = codepoints.get(from);
@@ -71,6 +72,14 @@ function isolatingRunSequences(codepointsWithX9, bidiTypesWithX9, paragraphLevel
       return sequences.push(sequence);
     }, List.of())
   );
+
+  return {
+    sequences: sequences,
+    codepoints: codepoints,
+    bidiTypes: bidi,
+    paragraphBidiTypes: pbidi,
+    levels: levels
+  };
 }
 
 export default isolatingRunSequences;

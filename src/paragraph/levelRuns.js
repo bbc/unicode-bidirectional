@@ -17,8 +17,8 @@ function levelRuns(codepoints, bidiTypes, paragraphLevel = 0) {
   const rules = [
     rle,   // X2.
     lre,   // X3.
-    //rlo  // X4.
-    //lro  // X5.
+    rlo,   // X4.
+    lro,   // X5.
     rli,   // X5a.
     lri,   // X5b.
     //fsi  // X5c.
@@ -37,7 +37,7 @@ function levelRuns(codepoints, bidiTypes, paragraphLevel = 0) {
       return rules.reduce((s, rule) => rule(codepoint, bidiType, index, s), state);
     }, initial);
 
-  return codepoints // [5]
+  const runs = codepoints // [5]
     .zip(bidiTypes, finalState.get('embeddingLevels'))
     .filter(([__, t, ___]) => isX9ControlCharacter(t) === false) // X9.
     .reduce((runs, [codepoint, bidiTypes, level], index) => {
@@ -49,6 +49,14 @@ function levelRuns(codepoints, bidiTypes, paragraphLevel = 0) {
         return runs.push(new Run({ level, from: index, to: index + 1 }));
       }
     }, List.of());
+
+  return {
+    runs: runs,
+    bidiTypes: finalState.get('bidiTypes'),
+    levels: finalState.get('embeddingLevels')
+  };
+
 }
+
 
 export default levelRuns;

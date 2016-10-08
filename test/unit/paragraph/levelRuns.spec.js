@@ -9,7 +9,7 @@ describe('[Paragraph] - Level Runs', () => {
     const codepoints = List.of(A, B, C);
     const bidiTypes = List.of('L', 'L', 'L');
     const runs = List.of(new Run({ level: 0, from: 0, to: 3 }));
-    expect(levelRuns(codepoints, bidiTypes)).to.equal(runs);
+    expect(levelRuns(codepoints, bidiTypes).runs).to.equal(runs);
   });
 
   it('should find level runs for "A·RLE·B·PDF·RLE·C·PDF·D"', () => {
@@ -20,7 +20,7 @@ describe('[Paragraph] - Level Runs', () => {
       new Run({ level: 1, from: 1, to: 3 }), // B, C
       new Run({ level: 0, from: 3, to: 4 })  // D
     );
-    expect(levelRuns(codepoints, bidiTypes)).to.equal(runs);
+    expect(levelRuns(codepoints, bidiTypes).runs).to.equal(runs);
   });
 
   it('should find level runs for "A·RLI·B·PDI·RLI·C·PDI·D"', () => {
@@ -33,7 +33,7 @@ describe('[Paragraph] - Level Runs', () => {
       new Run({ level: 1, from: 5, to: 6 }), // C
       new Run({ level: 0, from: 6, to: 8 }) // PDI, D
     );
-    expect(levelRuns(codepoints, bidiTypes)).to.equal(runs);
+    expect(levelRuns(codepoints, bidiTypes).runs).to.equal(runs);
   });
 
   it('should find level runs for "A·RLI·B·LRI·C·RLE·D·PDF·E·PDI·F·PDI·G"', () => {
@@ -48,7 +48,7 @@ describe('[Paragraph] - Level Runs', () => {
       new Run({ level: 1, from: 7, to: 9 }), // PDI, F
       new Run({ level: 0, from: 9, to: 11 }) // PDI, G
     );
-    expect(levelRuns(codepoints, bidiTypes)).to.equal(runs);
+    expect(levelRuns(codepoints, bidiTypes).runs).to.equal(runs);
   });
 
 });
