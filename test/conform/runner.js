@@ -23,7 +23,7 @@ function runLevelTests() {
   let fail = 0;
   const total = testCases.length;
 
-  testCases.slice(20, 21).forEach(function(test, index) {
+  testCases.slice(0, 260).forEach(function(test, index) {
     // fill in with arbitrary codepoints matching bidiType
 
     const bidiTypes = fromJS(test.bidiTypes);
@@ -39,11 +39,10 @@ function runLevelTests() {
       pass = pass + 1;
     } else {
       fail = fail + 1;
-      console.log('INPUT:', bidiTypes);
+      console.log('INPUT:', bidiTypes, `LEVEL = ${paragraphLevel}, AUTO = ${autoLTR}`);
       console.log('ACTUAL OUTPUT:', actual);
       console.log('EXPECTED OUTPUT:', expected);
     }
-
     const progress = [
       index,
       ' Total: ', total, ' ',

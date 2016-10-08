@@ -3,16 +3,23 @@ import isolatingRunSequences from '../paragraph/isolatingRunSequences';
 import { isX9ControlCharacter } from '../util/constant';
 import unzip from '../util/unzip';
 import runOffsets from './runOffsets';
+import automaticLevel from '../paragraph/automaticLevel';
+import resolveImplicit from '../implicit/implicit';
+import resolvedWeaks from '../weak/resolvedWeaks';
 
 function resolvedLevels(paragraphCodepoints, paragraphBidiTypes, paragraphLevel, autoLTR = false) {
-  const level = (autoLTR) ? automaticLevel(paragraphCodepoints) : paragraphLevel;
+  const level = (autoLTR) ? automaticLevel(paragraphCodepoints, paragraphBidiTypes) : paragraphLevel;
   const sequences = isolatingRunSequences(paragraphCodepoints, paragraphBidiTypes, level);
+  const resolvedTypes = resolvedWeaks(paragraphCodepoints, paragraphBidiTypes, level);
 
   const [codepoints, bidiTypes] = unzip(paragraphCodepoints
     .zip(paragraphBidiTypes)
     .filter(([__, t]) => isX9ControlCharacter(t) === false)); // [1]
+
   const N = codepoints.size;
-  return sequences.reduce(updateLevelsFromRuns, List(Range(0, N)).map(__ => 0));
+  const sequenceResolved = sequences.reduce(updateLevelsFromRuns, List(Range(0, N)).map(__ => 0));
+
+  return resolveImplicit(resolvedTypes, sequenceResolved);
 }
 
 function updateLevelsFromRuns(levels, sequence) {

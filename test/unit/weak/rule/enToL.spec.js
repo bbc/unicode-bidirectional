@@ -8,6 +8,12 @@ const NI = 0x0020 // U+0020 SPACE (e.g. of some Neutral-Isolate)
 
 describe('Resolving Weak Types - ENs to Ls', () => {
 
+  it('should change [EN] to [L] when sos = L', () => {
+    const points = List.of(EN);
+    const types = List.of('EN');
+    expect(enToL(types, points, 'L', 'L', 0)).to.equal(List.of('L'));
+  });
+
   it('should change [L,NI,EN] to [L,NI,L]', () => {
     const points = List.of(L, NI, EN);
     const types = List.of('L', 'NI', 'EN');

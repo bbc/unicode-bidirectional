@@ -30,7 +30,6 @@ function resolvedWeaksForSequence(codepoints, bidiTypes, sequence) {
   // merge together all the codepoint-slices and bidiType-slices
   // that each run in the sequence take
   const paragraph = codepoints.zip(bidiTypes);
-  console.log(bidiTypes);
   const [ codepointsFromSequence, bidiTypesFromSequence ] = unzip(
     sequence.get('runs').map(run => {
       const { from, to } = run.toJS();
