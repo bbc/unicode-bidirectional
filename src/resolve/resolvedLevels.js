@@ -24,25 +24,24 @@ function resolvedLevels(paragraphCodepoints, paragraphBidiTypes, paragraphLevel,
   const sequenceResolved = sequences.reduce(updateLevelsFromRuns, List(Range(0, N)).map(__ => 0));
   const resolvedImplicit = resolveImplicit(resolvedTypes, sequenceResolved);
 
+  console.log('sequences', sequences);
+
   return whitespacesLevelReset(pbidi, resolvedImplicit, level);
 }
 
 function updateLevelsFromRuns(levels, sequence) {
   const runs = sequence.get('runs');
-  const offsets = runOffsets(runs);
-  const levelSlices = runs.zip(offsets).map(([run, offset]) => {
+  const newLevels = runs.reduce((levels, run) => {
     const { from, to } = run.toJS();
-    const level = run.get('level');
     const size = to - from;
-    return List(Range(0, size))
-      .map(x => level)
-      .slice(offset, offset + size);
-  });
-
-  const newLevels = runs.zip(levelSlices).reduce((levels, [run, levelSlice]) => {
-    const { from, to } = run.toJS();
+    const level = run.get('level');
+    const levelSlice = List(Range(0, size)).map(x => level);
     return levels.slice(0, from).concat(levelSlice).concat(levels.slice(to));
   }, levels);
+
+  // console.log('levels', levels);
+  // console.log('newLevels', newLevels);
+  // console.log('----------');
 
   return newLevels;
 }

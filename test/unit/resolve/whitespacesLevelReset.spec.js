@@ -21,6 +21,13 @@ describe('[Resolve] - Resetting levels of whitespace characters (L1)', () => {
     expect(whitespacesLevelReset(types, levels, 0)).to.equal(reset);
   });
 
+  it('should reset a sequence of whitespaces/isolate-formatters preceding an B', () => {
+    const types = List.of('WS','FSI','RLI','LRI','B');
+    const levels = List.of(1,1,1,1,0);
+    const reset = List.of(0,0,0,0,0);
+    expect(whitespacesLevelReset(types, levels, 0)).to.equal(reset);
+  });
+
   it('should reset a sequence of whitespaces/isolate-formatters at the end of a line', () => {
     const types = List.of('WS','FSI','RLI','LRI');
     const levels = List.of(1,1,1,1);

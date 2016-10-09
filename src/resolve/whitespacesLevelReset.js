@@ -11,7 +11,7 @@ function whitespacesLevelReset(types, levels, paragraphLevel) {
     const ahead = types.slice(index).push('<EOL>');
     const aheadAdj = ahead.skipWhile(isWhitespaceResettable).first();
 
-    if (aheadAdj === '<EOL>' || aheadAdj === 'S') { // L1.3, L1.4
+    if (includes(['<EOL>', 'S', 'B'], aheadAdj)) { // L1.3, L1.4
       return paragraphLevel;
     } else {
       return level;

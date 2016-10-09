@@ -27,7 +27,7 @@ function rli(ch, bidiType, index, state) {
 
       if (lastOverride !== 'neutral') {
         const override = (lastOverride === 'left-to-right') ? 'L' : 'R';
-        return state.update('bidiTypes', ts => ts.set(index, 'R'))
+        return state.update('bidiTypes', ts => ts.set(index, override));
       } else {
         return state;
       }
@@ -50,4 +50,4 @@ function rli(ch, bidiType, index, state) {
   )(state);
 }
 
-export { rli };
+export default rli;

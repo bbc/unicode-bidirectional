@@ -2,9 +2,9 @@ import { rle } from './rle';
 import lre from './lre';
 import rlo from './rlo';
 import lro from './lro';
-import { rli } from './rli';
-import { lri } from './lri';
-function fsi(ch, index, state) { return state; }
+import rli from './rli';
+import lri from './lri';
+import fsi from './fsi';
 import other from './other';
 import { pdi } from './pdi';
 import { pdf } from './pdf';
@@ -16,7 +16,7 @@ export {
   lro,   // X5.
   rli,   // X5a.
   lri,   // X5b.
-  //fsi  // X5c.
+  fsi,   // X5c.
   other, // X6.
   pdi,   // X6a.
   pdf    // X7.

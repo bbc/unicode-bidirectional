@@ -5,13 +5,14 @@ import { LRI, RLI, FSI, PDI } from '../util/constant';
 
 // http://unicode.org/reports/tr9/#P2
 function automaticLevel(codepoints, bidiTypes) {
+
   const P2State = Record({ inside: false, counter: 0 }, 'P2State'); // P2.
   const betweenIsolate = codepoints
     .reduce((acc, codepoint) => {
       const counter = acc.get(-1, 0);
       return acc.push((() => {
         if (includes([LRI, RLI, FSI], codepoint)) return counter + 1;
-        else if (codepoint === PDI) return counter - 1;
+        else if (codepoint === PDI && counter > 0) return counter - 1;
         else return counter;
       })());
     }, List.of())

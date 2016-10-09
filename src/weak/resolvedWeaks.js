@@ -43,7 +43,9 @@ function resolvedWeaksForSequence(codepoints, bidiTypes, sequence) {
 
   const newTypesFromSequence = rules.reduce((types, rule) => {
     const level = sequence.get('runs').first().get('level');
-    return rule(types, codepointsFromSequence, sequence.get('sos'), sequence.get('eos'), level);
+    const t = rule(types, codepointsFromSequence, sequence.get('sos'), sequence.get('eos'), level);
+    console.log(t);
+    return t;
   }, bidiTypesFromSequence); // [1]
 
   const offsets = sequence.get('runs').butLast().reduce((acc, run)  => {

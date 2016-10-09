@@ -97,6 +97,7 @@ export {
   B1,
   S1,
   L1,
+  R1,
   ON1,
   AN1,
   EN1,

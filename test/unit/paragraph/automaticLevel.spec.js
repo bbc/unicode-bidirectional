@@ -44,4 +44,12 @@ describe('[Paragraph] - Finding Paragraph Level via Auto-LTR', () => {
     expect(automaticLevel(codepoints, bidiTypes)).to.equal(1);
   });
 
+  it('should determine the autolevel to be 0 for [PDI, RLI, R]', () => {
+    // ignoring the first PDI which has nothing to pop
+    // ignoring characters between RLI and the end of the paragraph (RLI has no matching PDI)
+    const codepoints = List.of(PDI, RLI, L);
+    const bidiTypes = List.of('PDI', 'RLI', 'L');
+    expect(automaticLevel(codepoints, bidiTypes)).to.equal(0);
+  });
+
 });
