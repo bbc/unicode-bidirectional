@@ -23,9 +23,6 @@ function resolvedLevels(paragraphCodepoints, paragraphBidiTypes, paragraphLevel,
   const N = bidiTypes.size;
   const sequenceResolved = sequences.reduce(updateLevelsFromRuns, List(Range(0, N)).map(__ => 0));
   const resolvedImplicit = resolveImplicit(resolvedTypes, sequenceResolved);
-
-  console.log('sequences', sequences);
-
   return whitespacesLevelReset(pbidi, resolvedImplicit, level);
 }
 

@@ -17,7 +17,7 @@ function runLevelTests() {
   let fail = 0;
   const total = testCases.length;
 
-  for (let index = 65879; index < 65880; index++) {
+  for (let index = 399999; index < 500000; index++) {
     const test = testCases[index];
     const bidiTypes = fromJS(test.bidiTypes);
     const codepoints = fillWithCodepoints(bidiTypes);
@@ -46,6 +46,7 @@ function runLevelTests() {
     process.stdout.write(progress);
 
     if (fail > 0) {
+      console.log(JSON.stringify(test));
       console.log('INPUT:', bidiTypes, `LEVEL = ${paragraphLevel}, AUTO = ${autoLTR}`);
       console.log('ACTUAL OUTPUT:', actual);
       console.log('EXPECTED OUTPUT:', expected);
