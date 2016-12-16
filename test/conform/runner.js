@@ -17,7 +17,7 @@ function runLevelTests() {
   let fail = 0;
   const total = testCases.length;
 
-  for (let index = 399999; index < 500000; index++) {
+  for (let index = 490841; index < 490842; index++) {
     const test = testCases[index];
     const bidiTypes = fromJS(test.bidiTypes);
     const codepoints = fillWithCodepoints(bidiTypes);

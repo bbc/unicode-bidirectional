@@ -1,3 +1,5 @@
+import includes from 'lodash.includes';
+
 // http://unicode.org/reports/tr9/#W4
 // [1]: A single European separator between two European
 //      numbers changes to a European number.
@@ -7,11 +9,12 @@
 function es(types) {
   if (types.size < 3) return types;
 
+  const isNumber = t => includes(['AN', 'EN'], t);
   const first = types.take(1);
   const middle = types.skip(2).zipWith((curr, prevOne, prevTwo) => {
     if (curr === 'EN' && curr === prevTwo && prevOne === 'ES') { // [1]
       return 'EN';
-    } else if (prevOne === 'CS' && curr === prevTwo) { // [2]
+    } else if (prevOne === 'CS' && isNumber(curr) && curr === prevTwo) { // [2]
       return curr;
     } else { // [3]
       return prevOne;

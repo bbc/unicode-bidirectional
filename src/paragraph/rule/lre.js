@@ -1,6 +1,6 @@
 import flow from 'lodash.flow';
 import { LRE, MAX_DEPTH } from '../../util/constant';
-import { DirectionalStatusStackEntry } from '../../type';
+import { increase, DirectionalStatusStackEntry } from '../../type';
 
 // http://unicode.org/reports/tr9/#X3
 function lre(ch, bidiType, index, state) {
