@@ -34,7 +34,7 @@ function rli(ch, bidiType, index, state) {
     },
     function increaseLevel(state) {
       const newLevel = (lastLevel + 1) + (lastLevel % 2);
-      const newLevelInvalid = (newLevel >= MAX_DEPTH); // [2]
+      const newLevelInvalid = (newLevel > MAX_DEPTH); // [2]
       const isOverflow = (newLevelInvalid || isCurrentlyOverflowing(state)); // [2]
 
       if (isOverflow) return state.update('overflowIsolateCount', increase);

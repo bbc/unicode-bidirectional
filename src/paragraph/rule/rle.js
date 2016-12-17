@@ -1,5 +1,5 @@
 import { RLE, MAX_DEPTH } from '../../util/constant';
-import { DirectionalStatusStackEntry } from '../../type';
+import { increase, DirectionalStatusStackEntry } from '../../type';
 import flow from 'lodash.flow';
 
 // http://unicode.org/reports/tr9/#X2
@@ -16,7 +16,7 @@ function rle(ch, bidiType, index, state) {
     },
     function(state) {
       const newLevel = (lastLevel + 1) + (lastLevel % 2);
-      const newLevelInvalid = (newLevel >= MAX_DEPTH); // [2]
+      const newLevelInvalid = (newLevel > MAX_DEPTH); // [2]
 
       const isolate = state.get('overflowIsolateCount');
       const embedding = state.get('overflowEmbeddingCount');

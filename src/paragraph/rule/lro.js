@@ -10,7 +10,7 @@ function lro(ch, bidiType, index, state) {
   const embedding = state.get('overflowEmbeddingCount');
 
   const newLevel = (lastLevel + 1) + ((lastLevel + 1) % 2);
-  const newLevelInvalid = (newLevel >= MAX_DEPTH); // [2]
+  const newLevelInvalid = (newLevel > MAX_DEPTH); // [2]
   const isCurrentOverflow = (isolate > 0 || embedding > 0); // [2]
   const isOverflowRLE = (newLevelInvalid || isCurrentOverflow); // [2]
 
