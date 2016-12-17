@@ -36,5 +36,30 @@ describe('[Resolve] - Reordering levels by rule L2.', () => {
     expect(reorderedLevels(storage, resolvedLevels)).to.equal(display);
   });
 
+  it('should be that [2, 1] swaps the first and second elements of display', () => {
+    expect(reorderedLevels(List.of(0, 1), List.of(2, 1))).to.equal(List.of(1, 0));
+  });
+
+  it('should be that [1, 1] swaps the first and second elements of storage', () => {
+    expect(reorderedLevels(List.of(0, 1), List.of(1, 1))).to.equal(List.of(1, 0));
+  });
+
+  it('should be that [1, 1, 1] reverses the storage', () => {
+    expect(reorderedLevels(List.of(0, 1, 2), List.of(1, 1, 1))).to.equal(List.of(2, 1, 0));
+  });
+
+  it('should be that [1, 1, 1, 1] reverses the storage', () => {
+    const storage = List.of(1,2,3,4);
+    expect(reorderedLevels(storage, List.of(1, 1, 1, 1))).to.equal(storage.reverse());
+  });
+
+  it('should be that [4, 3, 2, 1] performs four reversals', () => {
+    const levels = List.of(4,3,2,1);
+    const storage = List.of(1,2,3,4);
+    // 1234 -> 1234 -> 2134 -> 3124 -> 4213
+    const display = List.of(4,2,1,3)
+    expect(reorderedLevels(storage, levels)).to.equal(display);
+  });
+
 });
 

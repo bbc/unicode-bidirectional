@@ -26,9 +26,9 @@ function runLevelTests() {
     const paragraphLevel = ((bitset & 2) > 0) ? 0 : 1;
     const autoLTR = ((bitset & 1) > 0) ? true : false;
 
-    const actual = resolvedLevels(codepoints, bidiTypes, paragraphLevel, autoLTR)
-    const expected = fromJS(test.levels);
-    if (actual.equals(expected)) {
+    const actualLevels = resolvedLevels(codepoints, bidiTypes, paragraphLevel, autoLTR)
+    const expectedLevels = fromJS(test.levels);
+    if (actualLevels.equals(expectedLevels)) {
       pass = pass + 1;
     } else {
       fail = fail + 1;
