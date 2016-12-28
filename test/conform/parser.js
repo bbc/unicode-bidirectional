@@ -30,15 +30,15 @@ function parseFile(file) {
 function parseLevelsLine(line) {
   const tabIndex = line.indexOf('\t');
   return line.slice(tabIndex + 1).split(' ')
-    .filter(x => x !== 'x')
     .filter(x => x !== '')
-    .map(x => parseInt(x));
+    .map(x => (x === 'x') ? x : parseInt(x));
 }
 
 function parseReorderLine(line) {
   const tabIndex = line.indexOf('\t');
   return line.slice(tabIndex + 1).split(' ')
-    .filter(x => x !== '');
+    .filter(x => x !== '')
+    .map(x => (x === 'x') ? x : parseInt(x));
 }
 
 function parseDataLine(line) {

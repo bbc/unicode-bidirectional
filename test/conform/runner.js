@@ -3,7 +3,8 @@ const path = require('path');
 const filepath = path.resolve(__dirname, 'BidiTest.txt');
 const parseFile = require('./parser');
 const fromJS = require('immutable').fromJS;
-import resolvedLevels from '../../src/resolve/resolvedLevels';
+import { resolvedLevelsWithInvisibles } from '../../src/resolve/resolvedLevels';
+import { reorderPermutation } from '../../src/resolve/reorderedLevels';
 import fillWithCodepoints from './fillWithCodepoints';
 
 function runLevelTests() {
@@ -26,9 +27,15 @@ function runLevelTests() {
     const paragraphLevel = ((bitset & 2) > 0) ? 0 : 1;
     const autoLTR = ((bitset & 1) > 0) ? true : false;
 
-    const actualLevels = resolvedLevels(codepoints, bidiTypes, paragraphLevel, autoLTR)
+    const actualLevels = resolvedLevelsWithInvisibles(codepoints, bidiTypes, paragraphLevel, autoLTR)
+    const actualReorder = reorderPermutation(actualLevels);
+
     const expectedLevels = fromJS(test.levels);
-    if (actualLevels.equals(expectedLevels)) {
+    const expectedReorder = fromJS(test.reorder);
+
+    const levelPass = actualLevels.equals(expectedLevels)
+    const reorderPass = actualReorder.equals(expectedReorder)
+    if (levelPass && reorderPass) {
       pass = pass + 1;
     } else {
       fail = fail + 1;
@@ -48,8 +55,15 @@ function runLevelTests() {
     if (fail > 0) {
       console.log(JSON.stringify(test));
       // console.log('INPUT:', bidiTypes, `LEVEL = ${paragraphLevel}, AUTO = ${autoLTR}`);
-      console.log('ACTUAL OUTPUT:', actual);
-      console.log('EXPECTED OUTPUT:', expected);
+      if (!actualLevels.equals(expectedLevels)) {
+        console.log('Assertion Failure. Failure for @Levels.')
+        console.log('ACTUAL OUTPUT:', actualLevels);
+        console.log('EXPECTED OUTPUT:', expectedLevels);
+      } else {
+        console.log('Assertion Failure. Failure for @Reorder.')
+        console.log('ACTUAL OUTPUT:', actualReorder);
+        console.log('EXPECTED OUTPUT:', expectedReorder);
+      }
       break;
     }
 
