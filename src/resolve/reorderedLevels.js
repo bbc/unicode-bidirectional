@@ -1,4 +1,6 @@
-import { List, Range, Record } from 'immutable';
+import { List, Map, Range, Record } from 'immutable';
+import isNumber from 'lodash.isnumber';
+
 const ReorderPair = Record({ level: -1, from: 0, to: 0 }, 'ReorderPair');
 
 const spliceList = (list, from, to, paste) => {
@@ -6,6 +8,20 @@ const spliceList = (list, from, to, paste) => {
   const right = list.slice(to);
   return left.concat(paste).concat(right);
 };
+
+// Returns the storage -> display reordering performed by UBA
+// representing as a permutation on the set {0, 1, 2, ... n - 1}
+// Permutation represented via "one-line notation"
+// see: https://en.wikipedia.org/wiki/Permutation#Definition_and_notations
+function reorderPermutation(levels, INVISIBLE_MARK = 'x') {
+  const storage = List(Range(0, levels.size))
+    .map(i => Map({ strip: levels.get(i) === 'x', index: i }))
+    .filter(x => x.get('strip') === false)
+    .map(x => x.get('index'));
+
+  const levelsWithoutInvisibles = levels.filter(x => x != INVISIBLE_MARK);
+  return reorderedLevels(storage, levelsWithoutInvisibles);
+}
 
 // http://www.unicode.org/reports/tr9/#L2
 // first:   reverse slices at levels:  max
@@ -18,6 +34,10 @@ function reorderedLevels(storage, levels) {
     .groupBy(slice => slice.get('level'));
 
   const maxLevel = slicesByLevel.keySeq().max();
+  if (!isNumber(maxLevel) || maxLevel < 0) {
+    return storage;
+  }
+
   if (maxLevel === 0) {
     return storage;
   } else {
@@ -52,4 +72,5 @@ function reorderingSlices(levels, offset) {
     .concat(reorderingSlices(levels.slice(size), offset + size));
 }
 
+export { reorderPermutation };
 export default reorderedLevels;

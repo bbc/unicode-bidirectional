@@ -1,5 +1,5 @@
-import { List } from 'immutable';
-import reorderedLevels from '../../../src/resolve/reorderedLevels';
+import { List, Map } from 'immutable';
+import reorderedLevels, { reorderPermutation } from '../../../src/resolve/reorderedLevels';
 
 describe('[Resolve] - Reordering levels by rule L2.', () => {
   // - "Uppercase letters stand for right-to-left characters (such as Arabic or Hebrew)"
@@ -44,11 +44,11 @@ describe('[Resolve] - Reordering levels by rule L2.', () => {
     expect(reorderedLevels(List.of(0, 1), List.of(1, 1))).to.equal(List.of(1, 0));
   });
 
-  it('should be that [1, 1, 1] reverses the storage', () => {
+  it('should be that [1, 1, 1] reverses a storage of length 3', () => {
     expect(reorderedLevels(List.of(0, 1, 2), List.of(1, 1, 1))).to.equal(List.of(2, 1, 0));
   });
 
-  it('should be that [1, 1, 1, 1] reverses the storage', () => {
+  it('should be that [1, 1, 1, 1] reverses storage of length 4', () => {
     const storage = List.of(1,2,3,4);
     expect(reorderedLevels(storage, List.of(1, 1, 1, 1))).to.equal(storage.reverse());
   });
@@ -60,6 +60,39 @@ describe('[Resolve] - Reordering levels by rule L2.', () => {
     const display = List.of(4,2,1,3)
     expect(reorderedLevels(storage, levels)).to.equal(display);
   });
+});
 
+describe('[Resolve] - Reorder-Permutations', () => {
+
+  it('should give the identity permutation for levels [0,0]', () => {
+    expect(reorderPermutation(List.of(0,0))).to.equal(List.of(0,1));
+  });
+
+  it('should give [1,0] permutation for levels [1,1]', () => {
+    expect(reorderPermutation(List.of(1,1))).to.equal(List.of(1,0));
+  });
+
+  it('should give the reversing permutation for levels [1,1,1,2,1,1,1,1,1,2]', () => {
+    const levels = List.of(1,1,1,2,1,1,1,1,1,2);
+    const reverse = List.of(9,8,7,6,5,4,3,2,1,0)
+    expect(reorderPermutation(levels)).to.equal(reverse);
+  });
+
+  it('should give [] for when all levels are marked as invisible ("x")', () => {
+    expect(reorderPermutation(List.of('x','x', 'x'))).to.equal(List.of());
+  });
+
+  it('should give permutations; ignoring all levels marked as invisible ("x")', () => {
+    expect(reorderPermutation(List.of(0,'x',1,'x'))).to.equal(List.of(0,2));
+    expect(reorderPermutation(List.of('x',1,4))).to.equal(List.of(2,1));
+    expect(reorderPermutation(List.of(2,1,'x',1))).to.equal(List.of(3,1,0));
+  });
+
+  it('should give large permutations; ignoring all levels marked as invisible', () => {
+    const x = 'x'; // denotes invisible
+    const levels = List.of(0,x,1,1,2,x,3,x,2,1,1,x,0);
+    const permutation = List.of(0,10,9,4,6,8,3,2,12)
+    expect(reorderPermutation(levels)).to.equal(permutation);
+  });
 });
 
