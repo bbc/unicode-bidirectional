@@ -1,6 +1,6 @@
 # unicode-bidirectional
 
-*An implementation of [Unicode 9.0.0 Bidirectional Algorithm](http://www.unicode.org/reports/tr9/)*
+*An implementation of the [Unicode 9.0.0 Bidirectional Algorithm](http://www.unicode.org/reports/tr9/)*
 
 
 ## Testing
