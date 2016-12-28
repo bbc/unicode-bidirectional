@@ -17,7 +17,7 @@ function isolatingRunSequences(paragraphCodepoints, paragraphBidiTypes, paragrap
 
   const [codepoints, bidi, pbidi] = unzip3(paragraphCodepoints
     .zip(bidiTypes, paragraphBidiTypes)
-    .filter(([__, t, ___]) => isX9ControlCharacter(t) === false));
+    .filter(([__, t, ___]) => isX9ControlCharacter(t) === false)); // [1]
 
   const { initiatorToPDI, initiatorFromPDI } = matchingPDIs(codepoints);
 

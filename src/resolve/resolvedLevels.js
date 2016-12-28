@@ -36,10 +36,6 @@ function updateLevelsFromRuns(levels, sequence) {
     return levels.slice(0, from).concat(levelSlice).concat(levels.slice(to));
   }, levels);
 
-  // console.log('levels', levels);
-  // console.log('newLevels', newLevels);
-  // console.log('----------');
-
   return newLevels;
 }
 
