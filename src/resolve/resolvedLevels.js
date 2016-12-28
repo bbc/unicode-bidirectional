@@ -1,4 +1,4 @@
-import { List, Range } from 'immutable';
+import { List, Range, Record } from 'immutable';
 import isolatingRunSequences from '../paragraph/isolatingRunSequences';
 import { isX9ControlCharacter } from '../util/constant';
 import unzip from '../util/unzip';
@@ -8,6 +8,21 @@ import resolveImplicit from '../implicit/implicit';
 import resolvedWeaks from '../weak/resolvedWeaks';
 import includes from 'lodash.includes';
 import whitespacesLevelReset from './whitespacesLevelReset';
+
+function resolvedLevelsWithInvisibles(paragraphCodepoints, paragraphBidiTypes, paragraphLevel, autoLTR = false) {
+  const levels = resolvedLevels(paragraphCodepoints, paragraphBidiTypes, paragraphLevel, autoLTR);
+
+  function merge(bidiTypes, ls, acc) {
+    if (bidiTypes.size === 0) return acc;
+    if (isX9ControlCharacter(bidiTypes.first())) {
+      return merge(bidiTypes.rest(), ls, acc.push('x'))
+    } else {
+      return merge(bidiTypes.rest(), ls.rest(), acc.push(ls.first()))
+    }
+  }
+
+  return merge(paragraphBidiTypes, levels, List.of())
+}
 
 function resolvedLevels(paragraphCodepoints, paragraphBidiTypes, paragraphLevel, autoLTR = false) {
   const level = (autoLTR === true) ? automaticLevel(paragraphCodepoints, paragraphBidiTypes) : paragraphLevel;
@@ -39,4 +54,5 @@ function updateLevelsFromRuns(levels, sequence) {
   return newLevels;
 }
 
+export { resolvedLevelsWithInvisibles }
 export default resolvedLevels;
