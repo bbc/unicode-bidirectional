@@ -3,9 +3,9 @@ const path = require('path');
 const filepath = path.resolve(__dirname, 'BidiTest.txt');
 const parseFile = require('./parser');
 const fromJS = require('immutable').fromJS;
-import { resolvedLevelsWithInvisibles } from '../../src/resolve/resolvedLevels';
-import { reorderPermutation } from '../../src/resolve/reorderedLevels';
-import fillWithCodepoints from './fillWithCodepoints';
+import { resolvedLevelsWithInvisibles } from '../../../src/resolve/resolvedLevels';
+import { reorderPermutation } from '../../../src/resolve/reorderedLevels';
+import fillWithCodepoints from '../fillWithCodepoints';
 
 function runLevelTests() {
   console.log('[Conformance Test] - Level Tests');
