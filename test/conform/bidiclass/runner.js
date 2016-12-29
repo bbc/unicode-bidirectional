@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
-const filepath = path.resolve(__dirname, 'BidiTest.txt');
+const TEST_FILE = 'BidiTest.txt';
+const filepath = path.resolve(__dirname, TEST_FILE);
 const parseFile = require('./parser');
 const fromJS = require('immutable').fromJS;
 import { resolvedLevelsWithInvisibles } from '../../../src/resolve/resolvedLevels';
@@ -8,7 +9,7 @@ import { reorderPermutation } from '../../../src/resolve/reorderedLevels';
 import fillWithCodepoints from '../fillWithCodepoints';
 
 function runLevelTests() {
-  console.log('[Conformance Test] - Level Tests');
+  console.log(`[Conformance Test] - bidiclass conformance tests (${TEST_FILE})`);
   console.log('Parsing test data...');
   const file = fs.readFileSync(filepath, 'utf8');
   const testCases = parseFile(file);

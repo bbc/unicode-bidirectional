@@ -6,8 +6,9 @@
   "scripts": {
     "test": "npm run unit",
     "unit": "mocha --compilers js:babel-register -r test/unit/spec.helper.js 'test/unit/**/*.spec.js'",
-    "conform": "npm run conform-bidiclass",
-    "conform-bidiclass": "babel-node ./test/conform/bidiclass/runner.js"
+    "conform": "npm run conform-bidiclass && npm run conform-codepoint",
+    "conform-bidiclass": "babel-node ./test/conform/bidiclass/runner.js",
+    "conform-codepoint": "babel-node ./test/conform/codepoint/runner.js"
   },
   "babel": {
     "presets": [
@@ -39,7 +40,8 @@
     "lodash.identity": "^3.0.0",
     "lodash.includes": "^4.3.0",
     "lodash.isnumber": "^3.0.3",
-    "lodash.isundefined": "^3.0.1"
+    "lodash.isundefined": "^3.0.1",
+    "unicode-bidiclass": "git+ssh://git@github.com/jameslawson/unicode-bidiclass.git"
   },
   "devDependencies": {
     "babel-cli": "^6.16.0",
