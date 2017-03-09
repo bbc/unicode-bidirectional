@@ -36,14 +36,16 @@ function resolvedWeaksForSequence(codepoints, bidiTypes, sequence) {
     et,  // W5.
     on,  // W6.
     enToL, // W7.
-    resolveIsolates, // N0
-    resolveBrackets, // N1
+    resolveBrackets, // N0
+    resolveIsolates, // N1
     resolveRemaining // N2
   ]; // [1]
 
+  console.log('SEQUENCE', sequence);
   const newTypesFromSequence = rules.reduce((types, rule) => {
     const level = sequence.get('runs').first().get('level');
     const t = rule(types, codepointsFromSequence, sequence.get('sos'), sequence.get('eos'), level);
+    console.log('NEW TYPES = ', rule.name, ' applied: ', t);
     return t;
   }, bidiTypesFromSequence); // [1]
 

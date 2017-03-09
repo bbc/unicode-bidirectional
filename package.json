@@ -44,7 +44,8 @@
     "unicode-bidiclass": "git+ssh://git@github.com/jameslawson/unicode-bidiclass.git"
   },
   "devDependencies": {
-    "babel-cli": "^6.16.0",
+    "babel": "^6.5.2",
+    "babel-cli": "^6.22.2",
     "chai": "^3.5.0",
     "chai-immutable": "^1.6.0",
     "mocha": "^3.0.2",

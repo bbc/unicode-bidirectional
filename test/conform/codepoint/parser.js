@@ -23,11 +23,16 @@ function parseLine(line) {
   const fields = line.split(';');
   const parseDec = x => parseInt(x);
   const parseHex = x => parseInt(x, 16);
+  const parseLevel = l => {
+    if (l === 'x') return 'x';
+    return parseDec(l);
+  };
+
   return {
     codepoints: fields[0].split(' ').map(parseHex),
     direction: parseInt(fields[1]),
     expectedParagraphLevel: parseInt(fields[2]),
-    expectedLevels: fields[3].split(' ').map(parseDec),
+    expectedLevels: fields[3].split(' ').map(parseLevel),
     expectedReorder: fields[4].split(' ').map(parseDec)
   }
 }

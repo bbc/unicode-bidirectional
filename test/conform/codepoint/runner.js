@@ -9,7 +9,7 @@ const path = require('path');
 const parseFile = require('./parser');
 const TEST_FILE = 'BidiCharacterTest.txt';
 const filepath = path.resolve(__dirname, TEST_FILE);
-const TEST_COUNT = 1;
+const TEST_COUNT = 4000;
 
 function runTests() {
   console.log(`[Conformance Test] - codepoint conformance tests (${TEST_FILE})`);
@@ -22,7 +22,7 @@ function runTests() {
   const testCases = parseFile(file);
   const total = testCases.length;
 
-  for (let index = 0; index < TEST_COUNT; index++) {
+  for (let index = 16; index < 17; index++) {
     const test = testCases[index];
     const codepoints = fromJS(test.codepoints);
     const bidiTypes = codepoints.map(lookupBidiType);
@@ -58,10 +58,12 @@ function runTests() {
 
     if (fail > 0) {
       // console.log(JSON.stringify(test));
-      // console.log('INPUT:', bidiTypes, `LEVEL = ${paragraphLevel}, AUTO = ${autoLTR}`);
+      const serial = String.fromCharCode.apply(null, test.codepoints);
+      console.log('INPUT:', test.codepoints, ' = "', serial, '"');
+      console.log('OUTPUT:', bidiTypes, `LEVEL = ${paragraphLevel}, AUTO = ${autoLTR}`);
       if (!actualLevels.equals(expectedLevels)) {
         console.log('Assertion Failure.')
-          console.log('ACTUAL OUTPUT:', actualLevels);
+        console.log('ACTUAL OUTPUT  :', actualLevels);
         console.log('EXPECTED OUTPUT:', expectedLevels);
       }
       break;
