@@ -41,11 +41,11 @@ function resolvedWeaksForSequence(codepoints, bidiTypes, sequence) {
     resolveRemaining // N2
   ]; // [1]
 
-  console.log('SEQUENCE', sequence);
   const newTypesFromSequence = rules.reduce((types, rule) => {
     const level = sequence.get('runs').first().get('level');
-    const t = rule(types, codepointsFromSequence, sequence.get('sos'), sequence.get('eos'), level);
-    console.log('NEW TYPES = ', rule.name, ' applied: ', t);
+    // console.log(rule.name, ' types = ', types, '--', codepointsFromSequence)
+    const t = rule(types, codepointsFromSequence, sequence.get('sos'), sequence.get('eos'), level, bidiTypesFromSequence);
+    // console.log(rule.name, ' types = ', t, '--', codepointsFromSequence)
     return t;
   }, bidiTypesFromSequence); // [1]
 

@@ -22,7 +22,7 @@ function runTests() {
   const testCases = parseFile(file);
   const total = testCases.length;
 
-  for (let index = 16; index < 17; index++) {
+  for (let index = 0; index < 100; index++) {
     const test = testCases[index];
     const codepoints = fromJS(test.codepoints);
     const bidiTypes = codepoints.map(lookupBidiType);
@@ -57,10 +57,10 @@ function runTests() {
     process.stdout.write(progress);
 
     if (fail > 0) {
-      // console.log(JSON.stringify(test));
+      console.log(JSON.stringify(test));
       const serial = String.fromCharCode.apply(null, test.codepoints);
-      console.log('INPUT:', test.codepoints, ' = "', serial, '"');
-      console.log('OUTPUT:', bidiTypes, `LEVEL = ${paragraphLevel}, AUTO = ${autoLTR}`);
+      console.log('INPUT:', test.codepoints, ' = "', serial, '"', `LEVEL = ${paragraphLevel}, AUTO = ${autoLTR}`);
+      console.log('INPUT BIDI:', bidiTypes);
       if (!actualLevels.equals(expectedLevels)) {
         console.log('Assertion Failure.')
         console.log('ACTUAL OUTPUT  :', actualLevels);

@@ -13,18 +13,29 @@ import { oppositeBracket } from '../util/constant';
 // --| bidiTypes - sequence of bidirectional character types
 // --| Note: Bracket pairs can only occur in an isolating run sequence because they
 // --| are processed in rule N0 after explicit level resolution
+
+const STACK_MAX_SIZE = 63;
+
 function bracketPairs(points, bidiTypes) {
   // [1]: Sort the list of pairs of text positions in ascending order
   //      based on the text position of the opening paired bracket.
+  // [*]: "If an opening paired bracket is found and there is no room in the stack,
+  //       stop processing BD16 for the remainder of the isolating run sequence."
   const initialState = new BracketPairState();
   const finalState = points.reduce((state, point, position) => {
+    if (state.get('stackoverflow') === true) return state; // [*]
+
     const stack = state.get('stack');
 
     if (isOpeningBracket(point, 'ON')) {
-      return state.set('stack', stack.push(new BracketPairStackEntry({
-        point: oppositeBracket(point),
-        position
-      })));
+      if (stack.size == 63) { // [*]
+        return state.set('stackoverflow', true);
+      } else {
+        return state.set('stack', stack.push(new BracketPairStackEntry({
+          point: oppositeBracket(point),
+          position
+        })));
+      }
     } else if (isClosingBracket(point, 'ON') && stack.size > 0) {
       const openIndex = stack.findKey((entry) => entry.get('point') === point)
 

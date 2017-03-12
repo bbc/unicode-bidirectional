@@ -12,7 +12,6 @@ import { Sequence } from '../type';
 function isolatingRunSequences(paragraphCodepoints, paragraphBidiTypes, paragraphLevel = 0) {
   // [1]: By X9., we remove control characters that are not
   //      needed at this stage in bidi algorithm
-
   const { runs, bidiTypes, levels } = levelRuns(paragraphCodepoints, paragraphBidiTypes, paragraphLevel);
 
   const [codepoints, bidi, pbidi] = unzip3(paragraphCodepoints

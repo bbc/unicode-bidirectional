@@ -43,7 +43,7 @@ const Sequence = Record({
 // Used for BD16. to compute bracket pairs
 const BracketPairStackEntry = Record({ point: 0, position: 0 });
 const Pairing = Record({ open: 0, close: 0 });
-const BracketPairState = Record({ stack: Stack.of(), pairings: List.of() });
+const BracketPairState = Record({ stack: Stack.of(), pairings: List.of(), stackoverflow: false });
 
 export {
   increase,
