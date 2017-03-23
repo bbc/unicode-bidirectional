@@ -6,6 +6,10 @@ const fromJS = require('immutable').fromJS;
 const fs = require('fs');
 const path = require('path');
 
+// punycode is bundled with Node.js but was soft-deprecated in Node v7
+// so to make code more future-proof, we use punycode via npm
+const punycode = require('punycode');
+
 const parseFile = require('./parser');
 const TEST_FILE = 'BidiCharacterTest.txt';
 const filepath = path.resolve(__dirname, TEST_FILE);
@@ -22,9 +26,15 @@ function runTests() {
   const testCases = parseFile(file);
   const total = testCases.length;
 
-  for (let index = 215; index < 216; index++) {
+  for (let index = 0; index < total; index++) {
     const test = testCases[index];
-    const codepoints = fromJS(test.codepoints);
+
+    // perform normalization of the codepoints
+    const encoding = punycode.ucs2.encode(test.codepoints);
+    const normalForm = encoding.normalize('NFC');
+    const decoding = punycode.ucs2.decode(normalForm);
+    const codepoints = fromJS(decoding);
+
     const bidiTypes = codepoints.map(lookupBidiType);
     const paragraphLevel = test.direction;
     const autoLTR = (test.direction === 2);

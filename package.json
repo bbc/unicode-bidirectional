@@ -49,6 +49,7 @@
     "chai": "^3.5.0",
     "chai-immutable": "^1.6.0",
     "mocha": "^3.0.2",
-    "parsimmon": "^0.9.2"
+    "parsimmon": "^0.9.2",
+    "punycode": "^2.1.0"
   }
 }

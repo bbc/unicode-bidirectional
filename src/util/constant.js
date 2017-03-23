@@ -51,23 +51,31 @@ const WS1 = 0x0020 // U+0032 SPACE
 // Examples of S (Segment Separator)
 const S1 = 0x0009 // U+0009 CHARACTER TABULATION
 
+// --------------------------------------
+// Brackets
+// --------------------------------------
+
 const LEFT_CURLY = 0x007B;
 const LEFT_PAR = 0x0028;
 const LEFT_SQUARE = 0x005B;
 const RIGHT_CURLY = 0x007D;
 const RIGHT_PAR = 0x0029;
 const RIGHT_SQUARE = 0x005D;
-
-const bracketType = (p) => {
-  if (includes([LEFT_PAR, LEFT_SQUARE, LEFT_CURLY], p)) { return 'Open'; }
-  if (includes([RIGHT_PAR, RIGHT_SQUARE, RIGHT_CURLY], p)) { return 'Close'; }
-  else { return 'None'; }
-};
+const LEFT_POINTING_ANGLE = 0x2329;
+const RIGHT_POINTING_ANGLE = 0x232A;
+const LEFT_ANGLE_BRACKET = 0x3008;
+const RIGHT_ANGLE_BRACKET = 0x3009;
 
 const isOpeningBracket = (point, bidiType) =>
   bracketType(point) === 'Open'  && bidiType === 'ON';
 const isClosingBracket = (point, bidiType) =>
   bracketType(point) === 'Close' && bidiType === 'ON';
+
+const bracketType = (p) => {
+  if (includes([LEFT_PAR, LEFT_SQUARE, LEFT_CURLY, LEFT_POINTING_ANGLE, LEFT_ANGLE_BRACKET], p)) { return 'Open'; }
+  if (includes([RIGHT_PAR, RIGHT_SQUARE, RIGHT_CURLY, RIGHT_POINTING_ANGLE, RIGHT_ANGLE_BRACKET], p)) { return 'Close'; }
+  return 'None';
+};
 
 const oppositeBracket = (p) => {
   if (p == LEFT_PAR) return RIGHT_PAR;
@@ -76,8 +84,14 @@ const oppositeBracket = (p) => {
   if (p == RIGHT_SQUARE) return LEFT_SQUARE;
   if (p == LEFT_CURLY) return RIGHT_CURLY;
   if (p == RIGHT_CURLY) return LEFT_CURLY;
+  if (p == LEFT_POINTING_ANGLE) return RIGHT_POINTING_ANGLE;
+  if (p == RIGHT_POINTING_ANGLE) return LEFT_POINTING_ANGLE;
+  if (p == LEFT_ANGLE_BRACKET) return RIGHT_ANGLE_BRACKET;
+  if (p == RIGHT_ANGLE_BRACKET) return LEFT_ANGLE_BRACKET;
   return 'None';
 };
+
+// --------------------------------------
 
 const MAX_DEPTH = 125;
 
