@@ -22,7 +22,7 @@ function runTests() {
   const testCases = parseFile(file);
   const total = testCases.length;
 
-  for (let index = 0; index < 100; index++) {
+  for (let index = 215; index < 216; index++) {
     const test = testCases[index];
     const codepoints = fromJS(test.codepoints);
     const bidiTypes = codepoints.map(lookupBidiType);
