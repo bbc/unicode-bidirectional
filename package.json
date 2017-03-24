@@ -41,6 +41,7 @@
     "lodash.includes": "^4.3.0",
     "lodash.isnumber": "^3.0.3",
     "lodash.isundefined": "^3.0.1",
+    "unicode-9.0.0": "^0.7.0",
     "unicode-bidiclass": "git+ssh://git@github.com/jameslawson/unicode-bidiclass.git"
   },
   "devDependencies": {
