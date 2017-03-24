@@ -1,7 +1,7 @@
 {
   "name": "unicode-bidirectional",
   "version": "1.0.0",
-  "description": "*An implementation of Unicode 9.0.0 Bidirectional Algorithm*",
+  "description": "An implementation of Unicode 9.0.0 Bidirectional Algorithm",
   "main": "weak.js",
   "scripts": {
     "test": "npm run unit",
@@ -18,14 +18,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jameslawson/unicode-bidirectional.git"
+    "url": "git+https://github.com/bbc/unicode-bidirectional.git"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jameslawson/unicode-bidirectional/issues"
+    "url": "https://github.com/bbc/unicode-bidirectional/issues"
   },
-  "homepage": "https://github.com/jameslawson/unicode-bidirectional#readme",
+  "homepage": "https://github.com/bbc/unicode-bidirectional#readme",
   "dependencies": {
     "babel": "^6.5.2",
     "babel-core": "^6.9.0",
@@ -52,7 +52,6 @@
     "chai-immutable": "^1.6.0",
     "mocha": "^3.0.2",
     "nyc": "^10.1.2",
-    "parsimmon": "^0.9.2",
     "punycode": "^2.1.0"
   }
 }
