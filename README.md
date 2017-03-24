@@ -14,7 +14,7 @@ To run the **conformance tests** (as [provided by Unicode](http://unicode.org/re
 ```
 npm run conform
 ```
-This runs *both* of Unicodes test suites:
+This runs *both* of Unicode's test suites:
 1. Codepoint tests (`BidiTest.txt`, 91699 test cases) 
 2. Character class tests (`BidiCharacterTest.txt`, 490846 test cases),
 
@@ -25,4 +25,4 @@ npm run conform-bidiclass     # run just character class suite
 ```
 
 **Conformance**: The implementation is conformant as per definition [UAX9-C1](http://www.unicode.org/reports/tr9/#C1).
-Definitions BD1–BD16 and steps P1–P3, X1–X10, W1–W7, N0–N2, I1–I2, and L1–L3 have been implemented.
+Definitions BD1–BD16 and steps P1–P3, X1–X10, W1–W7, N0–N2, I1–I2, and L1–L4 have been implemented.
