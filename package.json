@@ -4,6 +4,7 @@
   "description": "An implementation of Unicode 9.0.0 Bidirectional Algorithm",
   "main": "weak.js",
   "scripts": {
+    "lint": "eslint src/ test/ -c config/eslint.config.json",
     "test": "npm run unit",
     "coverage": "nyc --reporter=lcov npm test",
     "unit": "mocha --compilers js:babel-register -r test/unit/spec.helper.js 'test/unit/**/*.spec.js'",
@@ -50,6 +51,7 @@
     "babel-cli": "^6.22.2",
     "chai": "^3.5.0",
     "chai-immutable": "^1.6.0",
+    "eslint": "^3.18.0",
     "mocha": "^3.0.2",
     "nyc": "^10.1.2",
     "punycode": "^2.1.0"
