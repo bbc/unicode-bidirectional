@@ -1,4 +1,4 @@
-import { resolve, reorder } from '../../src/main';
+import { resolve, reorder, reorderPermutation } from '../../src/main';
 
 describe('[API] Public API - main', () => {
 
@@ -14,5 +14,12 @@ describe('[API] Public API - main', () => {
     const reordered = reorder(codepoints, [1,1,1,1,1]);
     expect(reordered).to.deep.equal(codepoints.reverse());
   });
+
+  it('should expose "reorderPermutation()" so consumers convert levels to permutations', () => {
+    const levels = [1,1,1,0,0,0];
+    const permutation = [2,1,0,3,4,5];
+    const reordered = reorderPermutation(levels);
+    expect(reordered).to.deep.equal(permutation);
+  })
 
 });
