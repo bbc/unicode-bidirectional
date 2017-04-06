@@ -1,8 +1,8 @@
 {
   "name": "unicode-bidirectional",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "An implementation of Unicode 9.0.0 Bidirectional Algorithm",
-  "main": "weak.js",
+  "main": "src/main.js",
   "scripts": {
     "lint": "eslint src/ test/ -c config/eslint.config.json",
     "test": "npm run unit",
