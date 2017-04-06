@@ -21,8 +21,8 @@
     "type": "git",
     "url": "git+https://github.com/bbc/unicode-bidirectional.git"
   },
-  "author": "",
-  "license": "MIT",
+  "author": "BBC",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/bbc/unicode-bidirectional/issues"
   },
