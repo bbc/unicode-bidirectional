@@ -16,19 +16,28 @@ npm install unicode-bidirectional --save
 Returns the *levels* associated to each codepoint in *codepoints*.
 These levels of codepoints describe how they should be reversed when displayed on the screen.
 The input codepoints are in a paragraph with base direction of *paragraphLevel*. 
-- `codepoints` — an *Array of Numbers* where each number is an integer between 0x0000-0xFFFF (inclusive) representing the codepoint of the character.
-- `paragraphlevel` — a *Number* that is either `0` or `1`. Represents whether the paragraph is left-to-right (`0`) or right-to-left (`1`). This is same as the "paragraph embedding level" (see [BD4.](http://unicode.org/reports/tr9/#BD4)).
-- `automaticLevel` — a *Boolean* that when true, ignore the *paragraphlevel* argument and instead, deduce the paragraph level from the codepoints. This implements rules [P2.](http://unicode.org/reports/tr9/#P2) and [P3](http://unicode.org/reports/tr9/#P3). 
+- **`codepoints`** — an *Array of Numbers* where each number denotes the Unicode codepoint of the character.
+- **`paragraphlevel`** — a *Number* that is either `0` or `1`. Represents whether the paragraph is left-to-right (`0`) or right-to-left (`1`). This is same as the "paragraph embedding level" (see [BD4.](http://unicode.org/reports/tr9/#BD4)).
+- **`automaticLevel`** — a *Boolean* that when true, ignores the *paragraphlevel* argument and instead, deduces the paragraph level from the codepoints. This implements rules [P2.](http://unicode.org/reports/tr9/#P2) and [P3](http://unicode.org/reports/tr9/#P3). 
 - **returns** — an *Array of Numbers* representing the levels.
 
 **`reorder(codepoints, levels)`**    
 Returns the codepoints in *codepoints* reordered (permuted) according `levels` (see [L2.](http://unicode.org/reports/tr9/#L2)).
 The original *codepoints* array is not modified.
 
-- `codepoints` — an *Array of Numbers* where each number is an integer between 0x0000 and 0xFFFF (inclusive) representing the codepoint of the character.
-- `levels` — an *Array of Numbers* where each number is an integer between 0 and 127 (inclusive) representing the level of the codepoint
+- **`codepoints`** — an *Array of Numbers* where each number denotes the Unicode codepoint of the character.
+- **`levels`** — an *Array of Numbers* where each number is an integer denotes the level of the codepoint
 - **returns** — an *Array of Numbers* representing the reordered codepoints.
 
+**`reorderPermutation(levels)`**    
+Returns the permutation represented by *levels* as an array. 
+
+- **`levels`** — an *Array of Numbers* where each number denotes the level of the codepoint.
+- **returns** — an *Array of Numbers* representing a permutation; an element at index i with value j denotes that the codepoint previous positioned at index i is now positioned at index j.
+
+Additional Notes:
+1. all *levels* arrays are Arrays of Numbers where each number must be an integer between 0 and 127 (inclusive).
+2. all *codepoint* arrays are Arrays of Numbers where each number is an integer between 0x0000-0xFFFF (inclusive).
 
 ## Testing
 
