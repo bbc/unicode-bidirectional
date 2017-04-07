@@ -1,6 +1,6 @@
 {
   "name": "unicode-bidirectional",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "An implementation of Unicode 9.0.0 Bidirectional Algorithm",
   "main": "src/main.js",
   "scripts": {
@@ -10,7 +10,9 @@
     "unit": "mocha --compilers js:babel-register -r test/unit/spec.helper.js 'test/unit/**/*.spec.js'",
     "conform": "npm run conform-bidiclass && npm run conform-codepoint",
     "conform-bidiclass": "babel-node ./test/conform/bidiclass/runner.js",
-    "conform-codepoint": "babel-node ./test/conform/codepoint/runner.js"
+    "conform-codepoint": "babel-node ./test/conform/codepoint/runner.js",
+    "distribute": "babel src --presets babel-preset-es2015 --out-dir dist",
+    "prepublish": "npm run distribute"
   },
   "babel": {
     "presets": [
