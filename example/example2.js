@@ -1,5 +1,7 @@
-// Node.js
-// Browser: Webpack, browserify
+// Example 2. CommonJs
+// Targeting Node does not require extra tools.
+// Targeting Browser requires a bundler e.g. Webpack, browserify, ...
+
 var UnicodeBidirectional = require('unicode-bidirectional');
 var resolve = UnicodeBidirectional.resolve;
 var reorder = UnicodeBidirectional.reorder;
