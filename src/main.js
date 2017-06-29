@@ -1,8 +1,8 @@
 import { resolvedLevelsWithInvisibles } from './resolve/resolvedLevels';
 import reorderedLevels, { reorderPermutation as perm } from './resolve/reorderedLevels';
 import lookupBidiType from 'unicode-bidiclass';
-const punycode = require('punycode');
-const fromJS = require('immutable').fromJS;
+import punycode from 'punycode';
+import { fromJS } from 'immutable';
 
 // Public API
 function resolve(codepoints, paragraphLevel, automaticLevel = false) {
