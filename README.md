@@ -25,7 +25,7 @@ meaning it can be used with all conventional Javascript module systems:
 #### 1. ES6
 
 ```javascript
-import { resolve, reorder } from 'unicode-bidirectional/es6';
+import { resolve, reorder } from 'unicode-bidirectional';
 
 const codepoints = [0x28, 0x29, 0x2A, 0x05D0, 0x05D1, 0x05D2]
 const levels = resolve(codepoints, 0);  // [0, 0, 0, 1, 1, 1]
