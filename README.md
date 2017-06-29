@@ -22,7 +22,7 @@ npm install unicode-bidirectional --save
 unicode-bidirectional is declared as a *Universal Module* ([UMD](https://github.com/umdjs/umd)),
 meaning it can be used with all conventional Javascript module systems:
 
-#### 1. ES6
+#### 1. [ES6](https://github.com/bbc/unicode-bidirectional/blob/master/example/example1.js)
 
 ```javascript
 import { resolve, reorder } from 'unicode-bidirectional';
@@ -32,7 +32,7 @@ const levels = resolve(codepoints, 0);  // [0, 0, 0, 1, 1, 1]
 const reordering = reorder(codepoints, levels); // [0x28, 0x29, 0x2A, 0x05D2, 0x05D1, 0x05D0]
 ```
 
-#### 2. CommonJS
+#### 2. [CommonJS](https://github.com/bbc/unicode-bidirectional/blob/master/example/example2.js)
 
 ```javascript
 var UnicodeBidirectional = require('unicode-bidirectional/es6');
@@ -44,7 +44,7 @@ var levels = resolve(codepoints, 0);  // [0, 0, 0, 1, 1, 1]
 var reordering = reorder(codepoints, levels); // [0x28, 0x29, 0x2A, 0x05D2, 0x05D1, 0x05D0]
 ```
 
-#### 3. RequireJS
+#### 3. [RequireJS](https://github.com/bbc/unicode-bidirectional/blob/master/example/example3.js)
 
 ```javascript
 require(['UnicodeBidirectional'], function (UnicodeBidirectional) {
@@ -57,7 +57,8 @@ require(['UnicodeBidirectional'], function (UnicodeBidirectional) {
 });
 ```
 
-#### 4. HTML5 `<script>` tag
+
+#### 4. [HTML5 `<script>` tag](https://github.com/bbc/unicode-bidirectional/blob/master/example/example4.js)
 ```html
 <script src="unicode.bidirectional.js" /> <!-- exposes window.UnicodeBidirectional -->
 ```
@@ -71,7 +72,7 @@ var levels = resolve(codepoints, 0);  // [0, 0, 0, 1, 1, 1]
 var reordering = reorder(codepoints, levels); // [0x28, 0x29, 0x2A, 0x05D2, 0x05D1, 0x05D0]
 ```
 
-You can download `unicode.bidirectional.js` from released files from here.
+You can download `unicode.bidirectional.js` from [Releases](https://github.com/bbc/unicode-bidirectional/releases).
 Using this file with a `<script>` tag will
 expose `UnicodeBidirectional` as global variable on the `window` object.
 
