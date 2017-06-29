@@ -8,9 +8,6 @@
 This is an implementation of the Unicode Bidirectional Algorithm (UAX #9) that
 works in both Browser and Node.js environments. The implementation is conformant as per definition [UAX#9-C1](http://www.unicode.org/reports/tr9/#C1).
 
-**See Example →**
-
-
 ## Installation
 ```
 npm install unicode-bidirectional --save
@@ -22,7 +19,7 @@ npm install unicode-bidirectional --save
 unicode-bidirectional is declared as a *Universal Module* ([UMD](https://github.com/umdjs/umd)),
 meaning it can be used with all conventional Javascript module systems:
 
-#### 1. [ES6](https://github.com/bbc/unicode-bidirectional/blob/master/example/example1.js)
+#### 1. ES6 [→](https://github.com/bbc/unicode-bidirectional/blob/master/example/example1.js)
 
 ```javascript
 import { resolve, reorder } from 'unicode-bidirectional';
@@ -32,7 +29,7 @@ const levels = resolve(codepoints, 0);  // [0, 0, 0, 1, 1, 1]
 const reordering = reorder(codepoints, levels); // [0x28, 0x29, 0x2A, 0x05D2, 0x05D1, 0x05D0]
 ```
 
-#### 2. [CommonJS](https://github.com/bbc/unicode-bidirectional/blob/master/example/example2.js)
+#### 2. CommonJS [→](https://github.com/bbc/unicode-bidirectional/blob/master/example/example2.js)
 
 ```javascript
 var UnicodeBidirectional = require('unicode-bidirectional/es6');
@@ -44,7 +41,7 @@ var levels = resolve(codepoints, 0);  // [0, 0, 0, 1, 1, 1]
 var reordering = reorder(codepoints, levels); // [0x28, 0x29, 0x2A, 0x05D2, 0x05D1, 0x05D0]
 ```
 
-#### 3. [RequireJS](https://github.com/bbc/unicode-bidirectional/blob/master/example/example3.js)
+#### 3. RequireJS [→](https://github.com/bbc/unicode-bidirectional/blob/master/example/example3.js)
 
 ```javascript
 require(['UnicodeBidirectional'], function (UnicodeBidirectional) {
@@ -58,7 +55,7 @@ require(['UnicodeBidirectional'], function (UnicodeBidirectional) {
 ```
 
 
-#### 4. [HTML5 `<script>` tag](https://github.com/bbc/unicode-bidirectional/blob/master/example/example4.js)
+#### 4. HTML5 `<script>` tag [→](https://github.com/bbc/unicode-bidirectional/blob/master/example/example4.js)
 ```html
 <script src="unicode.bidirectional.js" /> <!-- exposes window.UnicodeBidirectional -->
 ```
