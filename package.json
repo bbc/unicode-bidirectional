@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "An implementation of Unicode 9.0.0 Bidirectional Algorithm",
   "main": "dist/unicode-bidirectional.js",
+  "module": "src/main.js",
+  "es6": "src/main.js",
   "scripts": {
     "lint": "eslint src/ test/ -c config/eslint.config.json",
     "test": "npm run unit",
