@@ -1,8 +1,10 @@
 {
   "name": "unicode-bidirectional",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "description": "An implementation of Unicode 9.0.0 Bidirectional Algorithm",
-  "main": "dist/main.js",
+  "main": "dist/unicode-bidirectional.js",
+  "module": "src/main.js",
+  "es6": "src/main.js",
   "scripts": {
     "lint": "eslint src/ test/ -c config/eslint.config.json",
     "test": "npm run unit",
@@ -11,8 +13,8 @@
     "conform": "npm run conform-bidiclass && npm run conform-codepoint",
     "conform-bidiclass": "babel-node ./test/conform/bidiclass/runner.js",
     "conform-codepoint": "babel-node ./test/conform/codepoint/runner.js",
-    "distribute": "babel src --presets babel-preset-es2015 --out-dir dist",
-    "prepublish": "npm run distribute"
+    "dist": "webpack --config config/webpack.config.js",
+    "dist-min": "WEBPACK_ENV=minify webpack --config config/webpack.config.js"
   },
   "babel": {
     "presets": [
@@ -24,21 +26,12 @@
     "url": "git+https://github.com/bbc/unicode-bidirectional.git"
   },
   "author": "BBC",
-  "license": "Apache-2.0",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/bbc/unicode-bidirectional/issues"
   },
   "homepage": "https://github.com/bbc/unicode-bidirectional#readme",
   "dependencies": {
-    "babel": "^6.5.2",
-    "babel-core": "^6.9.0",
-    "babel-eslint": "^6.0.4",
-    "babel-loader": "^6.2.4",
-    "babel-plugin-__coverage__": "^1.11.111",
-    "babel-plugin-transform-es2015-modules-umd": "^6.8.0",
-    "babel-preset-es2015": "^6.9.0",
-    "babel-register": "^6.9.0",
-    "babelify": "^7.2.0",
     "immutable": "^3.8.1",
     "lodash.flow": "^3.5.0",
     "lodash.identity": "^3.0.0",
@@ -49,13 +42,16 @@
     "unicode-bidiclass": "git+ssh://git@github.com/jameslawson/unicode-bidiclass.git"
   },
   "devDependencies": {
-    "babel": "^6.5.2",
     "babel-cli": "^6.22.2",
+    "babel-core": "^6.9.0",
+    "babel-loader": "^7.1.1",
+    "babel-preset-es2015": "^6.24.1",
     "chai": "^3.5.0",
     "chai-immutable": "^1.6.0",
-    "eslint": "^3.18.0",
-    "mocha": "^3.0.2",
+    "eslint": "^4.1.1",
+    "mocha": "^3.4.2",
     "nyc": "^10.1.2",
-    "punycode": "^2.1.0"
+    "punycode": "^2.1.0",
+    "webpack": "^3.0.0"
   }
 }
