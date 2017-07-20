@@ -13,14 +13,37 @@ const spliceList = (list, from, to, paste) => {
 // representing as a permutation on the set {0, 1, 2, ... n - 1}
 // Permutation represented via "one-line notation"
 // see: https://en.wikipedia.org/wiki/Permutation#Definition_and_notations
-function reorderPermutation(levels, INVISIBLE_MARK = 'x') {
+function reorderPermutation(levels, IGNORE_INVISIBLE = false, INVISIBLE_MARK = 'x') {
   const storage = List(Range(0, levels.size))
-    .map(i => Map({ strip: levels.get(i) === 'x', index: i }))
+    .map(i => Map({ strip: levels.get(i) === INVISIBLE_MARK, index: i }))
     .filter(x => x.get('strip') === false)
     .map(x => x.get('index'));
 
   const levelsWithoutInvisibles = levels.filter(x => x != INVISIBLE_MARK);
-  return reorderedLevels(storage, levelsWithoutInvisibles);
+  const reorderedWithoutInvisibles = reorderedLevels(storage, levelsWithoutInvisibles);
+
+  const Reduction = Record({ remaining: List(), result: List() }, 'Reduction');
+  const initialReduction = new Reduction({ remaining: reorderedWithoutInvisibles, result: List() });
+  const permutation = List(Range(0, levels.size))
+    .reduce((reduction, i) => {
+
+      if (levels.get(i) == INVISIBLE_MARK) {
+        const j = reduction.get('result').size;
+        return reduction.setIn(['result', i], j);
+      }
+
+      const remaining = reduction.get('remaining');
+      return reduction
+        .setIn(['result', i], remaining.first())
+        .set('remaining', remaining.shift());
+    }, initialReduction)
+    .get('result');
+
+  if (IGNORE_INVISIBLE) {
+    return reorderedWithoutInvisibles;
+  } else {
+    return permutation;
+  }
 }
 
 // http://www.unicode.org/reports/tr9/#L2
