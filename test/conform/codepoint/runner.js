@@ -40,7 +40,7 @@ function runTests() {
     const autoLTR = (test.direction === 2);
 
     const actualLevels = resolvedLevelsWithInvisibles(codepoints, bidiTypes, paragraphLevel, autoLTR);
-    const actualReorder = reorderPermutation(actualLevels);
+    const actualReorder = reorderPermutation(actualLevels, true);
 
     const expectedLevels = fromJS(test.expectedLevels);
     const expectedReorder = fromJS(test.expectedReorder);
