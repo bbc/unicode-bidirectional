@@ -78,21 +78,49 @@ describe('[Resolve] - Reorder-Permutations', () => {
     expect(reorderPermutation(levels)).to.equal(reverse);
   });
 
-  it('should give [] for when all levels are marked as invisible ("x")', () => {
-    expect(reorderPermutation(List.of('x','x', 'x'))).to.equal(List.of());
-  });
-
-  it('should give permutations; ignoring all levels marked as invisible ("x")', () => {
-    expect(reorderPermutation(List.of(0,'x',1,'x'))).to.equal(List.of(0,2));
-    expect(reorderPermutation(List.of('x',1,4))).to.equal(List.of(2,1));
-    expect(reorderPermutation(List.of(2,1,'x',1))).to.equal(List.of(3,1,0));
-  });
-
-  it('should give large permutations; ignoring all levels marked as invisible', () => {
+  // https://github.com/bbc/unicode-bidirectional/issues/23
+  it('should handle levels marked as invisible ("x")', () => {
     const x = 'x'; // denotes invisible
-    const levels = List.of(0,x,1,1,2,x,3,x,2,1,1,x,0);
-    const permutation = List.of(0,10,9,4,6,8,3,2,12)
+    const levels = List.of(x,x,x,x,x,x,x,0);
+    const permutation = List.of(0,1,2,3,4,5,6,7);
     expect(reorderPermutation(levels)).to.equal(permutation);
   });
+
+  it('should handle handle RTL reordering across levels marked as invisible ("x")', () => {
+    const x = 'x'; // denotes invisible
+    const levels = List.of(1,1,1,x,x,x,1,1,1);
+    const permutation = List.of(8,7,6,3,4,5,2,1,0);
+    expect(reorderPermutation(levels)).to.equal(permutation);
+  });
+
+  describe('using IGNORE_INVISIBLE = true', () => {
+    const IGNORE_INVISIBLE = true;
+
+    it('should give [] for when all levels are marked as invisible ("x")', () => {
+      expect(reorderPermutation(List.of('x','x', 'x'), IGNORE_INVISIBLE)).to.equal(List.of());
+    });
+
+    it('should give partial permutations; ignoring all levels marked as invisible ("x")', () => {
+      expect(reorderPermutation(List.of(0,'x',1,'x'), IGNORE_INVISIBLE)).to.equal(List.of(0,2));
+      expect(reorderPermutation(List.of('x',1,4), IGNORE_INVISIBLE)).to.equal(List.of(2,1));
+      expect(reorderPermutation(List.of(2,1,'x',1), IGNORE_INVISIBLE)).to.equal(List.of(3,1,0));
+    });
+
+    it('should for larger example give partial permutations; ignoring levels marked as ("x")', () => {
+      const x = 'x'; // denotes invisible
+      const levels = List.of(0,x,1,1,2,x,3,x,2,1,1,x,0);
+      const permutation = List.of(0,10,9,4,6,8,3,2,12)
+      expect(reorderPermutation(levels, IGNORE_INVISIBLE)).to.equal(permutation);
+    });
+
+    // https://github.com/bbc/unicode-bidirectional/issues/23
+    it('should give a parital permutation of [7] for seven zero-width spaces followed by LF', () => {
+      const x = 'x'; // denotes invisible
+      const levels = List.of(x,x,x,x,x,x,x,0);
+      const permutation = List.of(7);
+      expect(reorderPermutation(levels, IGNORE_INVISIBLE)).to.equal(permutation);
+    });
+  })
+
 });
 
