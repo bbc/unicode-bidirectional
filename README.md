@@ -95,7 +95,7 @@ Neither of the two input arrays are mutated.
 Returns the codepoints in **`codepoints`** reordered (i.e. permuted) according the `levels` array. <sup>[3]</sup>    
 Neither of the two input arrays are mutated.
 
-### `reorderPermutation(levels, IGNORE_INVISIBLE = false)`
+### `reorderPermutation(levels[, IGNORE_INVISIBLE = false])`
 Returns the reordering that **`levels`** represents as an permutation array.
 When this array has an element at index i with value j, it denotes that the codepoint 
 previous positioned at index i is now positioned at index j. <sup>[4]</sup>     
