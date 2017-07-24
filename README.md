@@ -95,24 +95,33 @@ Neither of the two input arrays are mutated.
 Returns the codepoints in **`codepoints`** reordered (i.e. permuted) according the `levels` array. <sup>[3]</sup>    
 Neither of the two input arrays are mutated.
 
-### `reorderPermutation(levels)`
+### `reorderPermutation(levels, IGNORE_INVISIBLE = false)`
 Returns the reordering that **`levels`** represents as an permutation array.
 When this array has an element at index i with value j, it denotes that the codepoint 
 previous positioned at index i is now positioned at index j. <sup>[4]</sup>     
-The input array is not mutated.
+The input array is not mutated. The `IGNORE_INVISIBLE` parameter controls whether or not
+invisible characters (characters with a level of 'x' <sup>[5]</sup>)
+are to be included in the permutation array. 
+By default, they *are* included in the permutation (they are *not* ignored, hence `IGNORE_INVISIBLE` is *false*).
 
 **Additional Notes:**
 
 > For all the above functions, codepoints are represented by an Array of Numbers 
 where each Number denotes the Unicode codepoint of the character, that 
 is an integer between 0x0 and 0x10FFFF inclusive. levels are represented by an Array of 
-Numbers where Number is an integer between 0 and 127 inclusive.
+Numbers where Number is an integer between 0 and 127 inclusive. One or more entries of levels 
+may be the string 'x'. This denotes a character that does not have a level <sup>[5]</sup>.
 
 
 > **[1]**: This function deduces the paragraph level according to:  [UAX#P1](http://unicode.org/reports/tr9/#P1), [UAX#P2](http://unicode.org/reports/tr9/#P2) and [UAX#P3](http://unicode.org/reports/tr9/#P3).   
-**[2]**: Codepoints are automatically converted to [NFC normal form](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/String/normalize) if that are not already in that form.    
+**[2]**: Codepoints are automatically converted to [NFC normal form](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/String/normalize) if that are not already in that form.   
 **[3]**: This is an implementation of [UAX#9-L2](http://unicode.org/reports/tr9/#L2).      
-**[4]**: More formally known as the *one-line notation* for permutations. [See Wikipedia](https://en.wikipedia.org/wiki/Permutation#Definition_and_notations).    
+**[4]**: More formally known as the *one-line notation* for permutations. [See Wikipedia](https://en.wikipedia.org/wiki/Permutation#Definition_and_notations).     
+**[5]**: Some characters have a level of x – the levels array has a string 'x' instead of a number.
+This is expected behaviour. The reason is because the Unicode Bidirectional algorithm (by rule [X9](http://unicode.org/reports/tr9/#X9).) will not assign a level to certain invisible characters / control characters. 
+They are basically completely ignored by the algorithm. 
+They are invisible and so have no impact on the visual RTL/LTR ordering of characters. 
+Most of the invisible characters that fall into this category are in this [list](https://www.compart.com/en/unicode/bidiclass/BN).
 
 
 ## More Info
