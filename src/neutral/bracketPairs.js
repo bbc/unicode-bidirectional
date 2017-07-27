@@ -4,8 +4,9 @@ import { BracketPairStackEntry, Pairing, BracketPairState } from '../type';
 import { LEFT_PAR, RIGHT_PAR } from '../util/constant';
 import { LEFT_SQUARE, RIGHT_SQUARE } from '../util/constant';
 import { LEFT_CURLY, RIGHT_CURLY } from '../util/constant';
-import { isOpeningBracket, isClosingBracket } from '../util/constant';
-import { oppositeBracket } from '../util/constant';
+import openingBrackets from '../util/openingBrackets';
+import closingBrackets from '../util/closingBrackets';
+import oppositeBracket from '../util/oppositeBracket';
 
 // --| bracketPairs(points: List<Int>, types: List<String>): List<Pairing>
 // --| Computes the bracket pairs (c.f. BD16) can that occur in an isolating run sequence.
@@ -27,16 +28,16 @@ function bracketPairs(points, bidiTypes) {
 
     const stack = state.get('stack');
 
-    if (isOpeningBracket(point, 'ON')) {
+    if (openingBrackets.has(point)) {
       if (stack.size == 63) { // [*]
         return state.set('stackoverflow', true);
       } else {
         return state.set('stack', stack.push(new BracketPairStackEntry({
-          point: oppositeBracket(point),
+          point: oppositeBracket.get(point),
           position
         })));
       }
-    } else if (isClosingBracket(point, 'ON') && stack.size > 0) {
+    } else if (closingBrackets.has(point) && stack.size > 0) {
       const openIndex = stack.findKey((entry) => entry.get('point') === point)
 
       if (!isUndefined(openIndex)) {
