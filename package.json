@@ -10,7 +10,7 @@
     "test": "npm run unit",
     "coverage": "nyc --reporter=lcov npm test",
     "unit": "mocha --compilers js:babel-register -r test/unit/spec.helper.js 'test/unit/**/*.spec.js'",
-    "conform": "npm run conform-bidiclass && npm run conform-codepoint",
+    "conform": "./test/conform/download_tests.sh && npm run conform-bidiclass && npm run conform-codepoint",
     "conform-bidiclass": "babel-node ./test/conform/bidiclass/runner.js",
     "conform-codepoint": "babel-node ./test/conform/codepoint/runner.js",
     "dist": "webpack --config config/webpack.config.js",
