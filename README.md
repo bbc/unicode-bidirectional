@@ -104,6 +104,20 @@ invisible characters (characters with a level of 'x' <sup>[5]</sup>)
 are to be included in the permutation array. 
 By default, they *are* included in the permutation (they are *not* ignored, hence `IGNORE_INVISIBLE` is *false*).
 
+### `mirror(codepoints, levels)`
+Replaces each codepoint in `codepoints` with its mirrored glyph according to rule [L4](http://unicode.org/reports/tr9/#L4)
+and the `levels` array.    
+Neither of the two input arrays are mutated.
+
+### `constants`
+An object containing metadata used by the bidirectional algorithm. This object includes the following keys:
+- `mirrorMap`: a map mapping a codepoint to its mirrored counterpart, e.g. looking up "<" gives ">". If a codepoint does not
+have a mirrored counterpart, then there is no key-value pair in the map and so a lookup will give *undefined*. <sup>[6]</sup>
+- `oppositeBracket`: a map mapping a codepoint to its bracket pair counterpart, e.g. looking up "(" gives ")". If a codepoint does not
+have a bracket pair counterpart, then there is no key-value pair in the map and so a lookup will give *undefined*. <sup>[7]</sup>
+- `openingBrackets`: a set containing all brackets that are opening brackets. <sup>[7]</sup>
+- `closingBrackets`: a set containing all brackets that are closing brackets. <sup>[7]</sup>
+
 **Additional Notes:**
 
 > For all the above functions, codepoints are represented by an Array of Numbers 
@@ -121,7 +135,10 @@ may be the string 'x'. This denotes a character that does not have a level <sup>
 This is expected behaviour. The reason is because the Unicode Bidirectional algorithm (by rule [X9](http://unicode.org/reports/tr9/#X9).) will not assign a level to certain invisible characters / control characters. 
 They are basically completely ignored by the algorithm. 
 They are invisible and so have no impact on the visual RTL/LTR ordering of characters. 
-Most of the invisible characters that fall into this category are in this [list](https://www.compart.com/en/unicode/bidiclass/BN).
+Most of the invisible characters that fall into this category are in this [list](https://www.compart.com/en/unicode/bidiclass/BN).        
+**[6]**: This is taken from [BidiMirroring.txt](http://www.unicode.org/Public/9.0.0/ucd/BidiMirroring.txt).    
+**[7]**: This is taken from [BidiBrackets.txt](http://www.unicode.org/Public/9.0.0/ucd/BidiBrackets.txt).
+
 
 ## Polyfills
 
