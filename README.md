@@ -123,6 +123,14 @@ They are basically completely ignored by the algorithm.
 They are invisible and so have no impact on the visual RTL/LTR ordering of characters. 
 Most of the invisible characters that fall into this category are in this [list](https://www.compart.com/en/unicode/bidiclass/BN).
 
+## Polyfills
+
+unicode-bidirectional uses the following ECMAScript 2015 (ES5) features that are not fully supported by Internet Explorer and older versions of other browsers:
+- [`Map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map#Browser_compatibility), [`Set`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set#Browser_compatibility)
+- [`String.prototype.normalize`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/String/normalize#Browser_compatibility)
+
+If you are targeting these browsers, you'll need to add one or more Polyfill libraries to fill in these features 
+(for example, [es6-shim](https://github.com/paulmillr/es6-shim) and [unorm](https://github.com/walling/unorm)).
 
 ## More Info
 
