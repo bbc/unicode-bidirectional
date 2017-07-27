@@ -81,14 +81,14 @@ expose `UnicodeBidirectional` as global variable on the `window` object.
 
 
 ### `resolve(codepoints, paragraphlevel[, automaticLevel = false])`
-Returns the resolved levels associated to each codepoint in **`codepoints`**.
+Returns the resolved levels associated to each codepoint in **`codepoints`**<sup>[1]</sup>.
 This levels array determines: (i) the relative nesting of LTR and RTL characters, and 
 hence (ii) how characters should be reversed when displayed on the screen.
 
 The input codepoints are assumed to be all be in one paragraph that has a base direction of **`paragraphLevel`** –
 this is a Number that is either 0 or 1 and represents whether the paragraph is *left-to-right* (0) or *right-to-left* (1).
 **`automaticLevel`** is an optional Boolean flag that when present and set to true, 
-causes this function to ignore the **`paragraphlevel`** argument and instead attempt to deduce the paragraph level from the codepoints. <sup>[1]</sup><sup>[2]</sup>    
+causes this function to ignore the **`paragraphlevel`** argument and instead attempt to deduce the paragraph level from the codepoints. <sup>[2]</sup>    
 Neither of the two input arrays are mutated.
 
 ### `reorder(codepoints, levels)`
@@ -113,8 +113,8 @@ Numbers where Number is an integer between 0 and 127 inclusive. One or more entr
 may be the string 'x'. This denotes a character that does not have a level <sup>[5]</sup>.
 
 
-> **[1]**: This function deduces the paragraph level according to:  [UAX#P1](http://unicode.org/reports/tr9/#P1), [UAX#P2](http://unicode.org/reports/tr9/#P2) and [UAX#P3](http://unicode.org/reports/tr9/#P3).   
-**[2]**: Codepoints are automatically converted to [NFC normal form](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/String/normalize) if that are not already in that form.   
+> **[1]**: Codepoints are automatically converted to [NFC normal form](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/String/normalize) if they are not already in that form.    
+**[2]**: This function deduces the paragraph level according to:  [UAX#P1](http://unicode.org/reports/tr9/#P1), [UAX#P2](http://unicode.org/reports/tr9/#P2) and [UAX#P3](http://unicode.org/reports/tr9/#P3).     
 **[3]**: This is an implementation of [UAX#9-L2](http://unicode.org/reports/tr9/#L2).      
 **[4]**: More formally known as the *one-line notation* for permutations. [See Wikipedia](https://en.wikipedia.org/wiki/Permutation#Definition_and_notations).     
 **[5]**: Some characters have a level of x – the levels array has a string 'x' instead of a number.
