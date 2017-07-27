@@ -3,6 +3,11 @@ import reorderedLevels, { reorderPermutation as perm } from './resolve/reordered
 import lookupBidiType from 'unicode-bidiclass';
 import punycode from 'punycode';
 import { fromJS } from 'immutable';
+import openingBrackets from './util/openingBrackets';
+import closingBrackets from './util/closingBrackets';
+import oppositeBracket from './util/oppositeBracket';
+import mirrorMap from 'unicode-9.0.0/Bidi_Mirroring_Glyph';
+import mirrorCodepoints from './resolve/mirror';
 
 // Public API
 function resolve(codepoints, paragraphLevel, automaticLevel = false) {
@@ -25,4 +30,17 @@ function reorderPermutation(levels) {
 }
 
 // Public API
-export { resolve, reorder, reorderPermutation };
+function mirror(codepoints, levels) {
+  return mirrorCodepoints(fromJS(codepoints), fromJS(levels)).toJS();
+}
+
+// Public API
+const constants = {
+  mirrorMap,
+  oppositeBracket,
+  openingBrackets,
+  closingBrackets
+};
+
+// Public API
+export { resolve, reorder, reorderPermutation, mirror, constants };

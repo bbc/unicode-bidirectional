@@ -1,4 +1,5 @@
-import { resolve, reorder, reorderPermutation } from '../../src/main';
+import { resolve, reorder, reorderPermutation, mirror, constants } from '../../src/main';
+import { LEFT_PAR, RIGHT_PAR } from '../../src/util/constant';
 
 describe('[API] Public API - main', () => {
 
@@ -15,11 +16,39 @@ describe('[API] Public API - main', () => {
     expect(reordered).to.deep.equal(codepoints.reverse());
   });
 
-  it('should expose "reorderPermutation()" so consumers convert levels to permutations', () => {
+  it('should expose "reorderPermutation()" so consumers can convert levels to permutations', () => {
     const levels = [1,1,1,0,0,0];
     const permutation = [2,1,0,3,4,5];
     const reordered = reorderPermutation(levels);
     expect(reordered).to.deep.equal(permutation);
-  })
+  });
+
+  it('should expose "mirror()" so consumers can mirror codepoints that sgould be mirrored', () => {
+    const codepoints = [LEFT_PAR, RIGHT_PAR];
+    const levels = [1, 1];
+    const mirrored = [RIGHT_PAR, LEFT_PAR];
+    expect(mirror(codepoints, levels)).to.deep.equal(mirrored);
+  });
+
+  it('should expose the mirror map in constants', () => {
+    const mirrorMap = constants.mirrorMap;
+    expect(mirrorMap.get(LEFT_PAR)).to.equal(')');
+  });
+
+  it('should expose the opening brackets set in constants', () => {
+    const openingBrackets = constants.openingBrackets;
+    expect(openingBrackets.has(LEFT_PAR)).to.equal(true);
+  });
+
+  it('should expose the closing brackets set in constants', () => {
+    const closingBrackets = constants.closingBrackets;
+    expect(closingBrackets.has(RIGHT_PAR)).to.equal(true);
+  });
+
+  it('should expose the opposite bracket map in constants', () => {
+    const oppositeBracket = constants.oppositeBracket;
+    expect(oppositeBracket.get(LEFT_PAR)).to.equal(RIGHT_PAR);
+    expect(oppositeBracket.get(RIGHT_PAR)).to.equal(LEFT_PAR);
+  });
 
 });
