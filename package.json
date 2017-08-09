@@ -1,6 +1,6 @@
 {
   "name": "unicode-bidirectional",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "An implementation of Unicode 9.0.0 Bidirectional Algorithm",
   "main": "dist/unicode-bidirectional.js",
   "module": "src/main.js",
@@ -39,7 +39,7 @@
     "lodash.isnumber": "^3.0.3",
     "lodash.isundefined": "^3.0.1",
     "unicode-9.0.0": "^0.7.0",
-    "unicode-bidiclass": "git+ssh://git@github.com/jameslawson/unicode-bidiclass.git"
+    "unicode-bidiclass": "v1.0.1"
   },
   "devDependencies": {
     "babel-cli": "^6.22.2",
