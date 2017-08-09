@@ -32,7 +32,7 @@ const reordering = reorder(codepoints, levels); // [0x28, 0x29, 0x2A, 0x05D2, 0x
 #### 2. CommonJS [→](https://github.com/bbc/unicode-bidirectional/blob/master/example/example2.js)
 
 ```javascript
-var UnicodeBidirectional = require('unicode-bidirectional');
+var UnicodeBidirectional = require('unicode-bidirectional/dist/unicode.bidirectional');
 var resolve = UnicodeBidirectional.resolve;
 var reorder = UnicodeBidirectional.reorder;
 
