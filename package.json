@@ -2,7 +2,7 @@
   "name": "unicode-bidirectional",
   "version": "2.0.5",
   "description": "An implementation of Unicode 9.0.0 Bidirectional Algorithm",
-  "main": "dist/unicode-bidirectional.js",
+  "main": "dist/unicode.bidirectional.js",
   "module": "src/main.js",
   "es6": "src/main.js",
   "scripts": {
